@@ -1,0 +1,58 @@
+.nav {
+    height: 40px;
+    width: 100%;
+    background-color: #0c70cf;
+    font-size: 20px;
+    font-weight: bolder;
+    color: white;
+    line-height: 40px;
+}
+
+.input-file {
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    border: none;
+    height: 40px;
+    padding: 0 10px;
+    line-height: 40px;
+    border-radius: 10px;
+    background-color: beige;
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(212, 212, 193);
+    }
+}
+.input-btn {
+    position: absolute;
+    left: 10px;
+    top: 150px;
+    border: none;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 10px;
+    background-color: beige;
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(212, 212, 193);
+    }
+}
+.table {
+    width: 60%;
+    margin-bottom: 20px;
+    background-color: beige;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-top: 30px;
+}
