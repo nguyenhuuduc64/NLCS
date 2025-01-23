@@ -4,8 +4,6 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 function Table({ itemsArray, sapxep }) {
-    console.log(sapxep);
-
     if (sapxep) {
         /*tạo đơn giá cho các đò vật */
         for (let i = 0; i < itemsArray.length; i++) {
@@ -26,7 +24,7 @@ function Table({ itemsArray, sapxep }) {
     }
     return (
         <div>
-            {itemsArray.length != 0 && (
+            {itemsArray && (
                 <table className={cx('table')}>
                     <thead>
                         <tr>
@@ -39,10 +37,10 @@ function Table({ itemsArray, sapxep }) {
                     <tbody>
                         {itemsArray.map((item, index) => (
                             <tr key={index}>
-                                <td>{item.ten}</td>
-                                <td>{item.TL}</td>
-                                <td>{item.GT}</td>
-                                <td>{item.dg ?? item.DG}</td>
+                                <td>{item.ten || 'N/A'}</td>
+                                <td>{item.TL || 0}</td>
+                                <td>{item.GT || 0}</td>
+                                {sapxep && <td>{item.DG || 0}</td>}
                             </tr>
                         ))}
                     </tbody>
@@ -51,5 +49,4 @@ function Table({ itemsArray, sapxep }) {
         </div>
     );
 }
-
 export default Table;
