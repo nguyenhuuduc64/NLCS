@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import styles from './home.module.scss';
 import { useContext, useRef, useState } from 'react';
 import { Item } from '../../Items';
-import Table from './table';
 import InputTable from '../../components/InputTable/inputTable';
 import OutputTable from '../../components/OutputTable/outputTable';
 import { itemsContext } from '../../App';
@@ -12,11 +11,12 @@ const cx = classNames.bind(styles);
 function Home() {
     const [file, setFile] = useState(null);
     const [soluong, setSoluong] = useState(0);
-    const { itemsArray, setItemsArray } = useContext(itemsContext);
+    const { itemsArrayFile, setItemsArrayFile, itemArrayHand, setItemsArrayHand } = useContext(itemsContext);
     const [inputState, setInputState] = useState(false);
     const [trongluong, setTrongluong] = useState(0);
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        setItemsArrayHand([]);
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -25,7 +25,6 @@ function Home() {
                 const lines = text.split('\n');
                 setSoluong(lines.length);
                 setTrongluong(lines[0].split('\t')[0]);
-                console.log(trongluong);
                 const items = lines
                     .filter((line, index) => index != 0)
                     .map((line, index) => {
@@ -37,7 +36,7 @@ function Home() {
                         return new Item(itemTemple);
                     });
 
-                setItemsArray(items);
+                setItemsArrayFile(items);
             };
             reader.readAsText(file);
         }
@@ -46,42 +45,43 @@ function Home() {
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
-            <input id="input-file" style={{ display: 'none' }} type="file" onChange={handleFileChange} />
-            <label htmlFor="input-file" className={cx('input-file')}>
-                Chọn tập tin
-            </label>
+            <div className={cx('input-container')}>
+                <input id="input-file" style={{ display: 'none' }} type="file" onChange={handleFileChange} />
+                <label htmlFor="input-file" className={cx('input-file')}>
+                    Chọn tập tin
+                </label>
 
-            <input
-                id="input-btn"
-                type="button"
-                style={{ display: 'none' }}
-                onClick={() => {
-                    setInputState((prev) => !prev);
-                }}
-            />
-            <label htmlFor="input-btn" className={cx('input-btn')}>
-                Nhập thông tin đồ vật
-            </label>
+                <input
+                    id="input-btn"
+                    type="button"
+                    style={{ display: 'none' }}
+                    onClick={() => {
+                        setInputState((prev) => !prev);
+                    }}
+                />
+                <label htmlFor="input-btn" className={cx('input-btn')}>
+                    Nhập thông tin đồ vật
+                </label>
+            </div>
 
-            {itemsArray.length != 0 && (
-                <div>
-                    <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
-                    <p>trọng lượng: {trongluong}</p>
-                    <Table itemsArray={itemsArray} sapxep={false} />
-                </div>
-            )}
+            <div className={cx('read-table-container')}>
+                {itemsArrayFile.length !== 0 && (
+                    <div>
+                        <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
+                        <p style={{ fontWeight: 'bolder' }}>trọng lượng của ba lô: {trongluong}</p>
+                        <OutputTable sapxep={false} />
+                    </div>
+                )}
 
-            {itemsArray.length != 0 && (
-                <div>
-                    <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
-                    <Table itemsArray={itemsArray} sapxep={true} />
-                </div>
-            )}
+                {itemsArrayFile.length !== 0 && (
+                    <div>
+                        <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
+                        <OutputTable sapxep={true} />
+                    </div>
+                )}
+            </div>
 
             <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
-            <div>
-                <OutputTable />
-            </div>
         </div>
     );
 }

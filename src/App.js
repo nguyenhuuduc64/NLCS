@@ -5,9 +5,17 @@ import { createContext, useContext, useState } from 'react';
 
 export const itemsContext = createContext();
 function App() {
-    const [itemsArray, setItemsArray] = useState([]);
+    const [itemsArrayFile, setItemsArrayFile] = useState([]);
+    const [itemsArrayHand, setItemsArrayHand] = useState([]);
     return (
-        <itemsContext.Provider value={{ itemsArray, setItemsArray }}>
+        <itemsContext.Provider
+            value={{
+                itemsArrayFile,
+                setItemsArrayFile,
+                itemsArrayHand,
+                setItemsArrayHand,
+            }}
+        >
             <GlobalStyles>
                 <div className="App">
                     <Home />

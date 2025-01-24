@@ -8,44 +8,41 @@
     line-height: 40px;
 }
 
-.input-file {
-    position: absolute;
-    left: 10px;
-    top: 50px;
-    border: none;
-    height: 40px;
-    padding: 0 10px;
-    line-height: 40px;
-    border-radius: 10px;
-    background-color: beige;
-    &:hover {
-        cursor: pointer;
-        background-color: rgb(212, 212, 193);
-    }
+.input-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
 }
+
+.input-file,
 .input-btn {
-    position: absolute;
-    left: 10px;
-    top: 150px;
     border: none;
-    padding: 0 10px;
+    text-align: center;
+    margin: 10px 10px;
     height: 40px;
     line-height: 40px;
     border-radius: 10px;
-    background-color: beige;
+    width: 200px;
+    background-color: #0c70cf;
+    font-weight: bolder;
+    color: white;
     &:hover {
         cursor: pointer;
-        background-color: rgb(212, 212, 193);
+        background-color: #3983c9;
     }
 }
+
 .table {
-    width: 60%;
+    width: 100%;
     margin-bottom: 20px;
     background-color: beige;
     margin-left: auto;
     margin-right: auto;
 }
 
+.read-table-container {
+    width: 50vw;
+}
 .input-table-container {
     display: flex;
     justify-content: center;
@@ -55,4 +52,20 @@
     left: 50%;
     transform: translate(-50%, -50%);
     margin-top: 30px;
+}
+
+.thead {
+    background-color: #0c70cf;
+    color: white;
+    font-weight: bolder;
+}
+
+/*************output-table***************/
+
+.output-table {
+    width: 80%;
+    margin-bottom: 20px;
+    background-color: beige;
+    margin-left: auto;
+    margin-right: auto;
 }
