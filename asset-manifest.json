@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/NLCS/static/css/main.0a2049d2.css",
+    "main.js": "/NLCS/static/js/main.aeb6fc2d.js",
+    "index.html": "/NLCS/index.html",
+    "main.0a2049d2.css.map": "/NLCS/static/css/main.0a2049d2.css.map",
+    "main.aeb6fc2d.js.map": "/NLCS/static/js/main.aeb6fc2d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0a2049d2.css",
+    "static/js/main.aeb6fc2d.js"
+  ]
+}
