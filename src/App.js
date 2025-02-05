@@ -8,6 +8,8 @@ function App() {
     const [itemsArrayFile, setItemsArrayFile] = useState([]);
     const [itemsArrayHand, setItemsArrayHand] = useState([]);
     const [greedy, setGreedy] = useState(false);
+    const [branhAndBound, setBranhAndBound] = useState(false);
+    const [dynamicProgramming, setDynamicProgramming] = useState(false);
     const [trongluong, setTrongluong] = useState(0);
     return (
         <itemsContext.Provider
@@ -20,6 +22,10 @@ function App() {
                 setGreedy,
                 setTrongluong,
                 trongluong,
+                branhAndBound,
+                setBranhAndBound,
+                dynamicProgramming,
+                setDynamicProgramming,
             }}
         >
             <GlobalStyles>

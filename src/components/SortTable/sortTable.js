@@ -11,7 +11,7 @@ function SortTable({ sapxep, PA, itemsArray }) {
         /*tạo đơn giá cho các đò vật */
         for (let i = 0; i < itemsArray.length; i++) {
             /*làm tròn đến số thập phân thứ 2 */
-            itemsArray[i].DG = Math.round((itemsArray[i].TL / itemsArray[i].GT) * 100) / 100;
+            itemsArray[i].DG = Math.round((itemsArray[i].GT / itemsArray[i].TL) * 100) / 100;
         }
         /*sắp xếp lại mảng */
         for (let i = 0; i < itemsArray.length; i++) {
@@ -24,15 +24,7 @@ function SortTable({ sapxep, PA, itemsArray }) {
             }
         }
     }
-    var current_trongluong = trongluong;
-    console.log(current_trongluong);
-    if (greedy) {
-        itemsArray.forEach((item, index) => {
-            item.PA = Math.floor(current_trongluong / item.TL);
 
-            current_trongluong = current_trongluong - item.PA * item.TL;
-        });
-    }
     return (
         <div className={cx('output-table')}>
             {itemsArray && (

@@ -21,6 +21,10 @@ function Home() {
         setGreedy,
         trongluong,
         setTrongluong,
+        branhAndBound,
+        setBranhAndBound,
+        dynamicProgramming,
+        setDynamicProgramming,
     } = useContext(itemsContext);
     const [inputState, setInputState] = useState(false);
 
@@ -93,11 +97,36 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setGreedy((prev) => !prev);
-                            console.log(greedy);
                         }}
                     />
                     <label htmlFor="greedy-btn" className={cx('input-btn')}>
                         Thuật toán tham lam
+                    </label>
+                </div>
+                <div>
+                    <input
+                        id="bnb-btn"
+                        type="button"
+                        style={{ display: 'none' }}
+                        onClick={() => {
+                            setBranhAndBound((prev) => !prev);
+                        }}
+                    />
+                    <label htmlFor="bnb-btn" className={cx('input-btn')}>
+                        Thuật toán nhánh cận
+                    </label>
+                </div>
+                <div>
+                    <input
+                        id="dynamicpg-btn"
+                        type="button"
+                        style={{ display: 'none' }}
+                        onClick={() => {
+                            setBranhAndBound((prev) => !prev);
+                        }}
+                    />
+                    <label htmlFor="dynamicpg-btn" className={cx('input-btn')}>
+                        Thuật toán quy hoạch động
                     </label>
                 </div>
             </div>
