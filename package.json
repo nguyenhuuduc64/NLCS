@@ -13,12 +13,15 @@
     "scss": "^0.2.4",
     "web-vitals": "^4.2.4"
   },
+  "homepage": "https://nguyenhuuduc64.github.io/NLCS",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "prettier": "^3.4.2",
     "sass": "^1.83.1"
   }

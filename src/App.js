@@ -7,6 +7,8 @@ export const itemsContext = createContext();
 function App() {
     const [itemsArrayFile, setItemsArrayFile] = useState([]);
     const [itemsArrayHand, setItemsArrayHand] = useState([]);
+    const [greedy, setGreedy] = useState(false);
+    const [trongluong, setTrongluong] = useState(0);
     return (
         <itemsContext.Provider
             value={{
@@ -14,6 +16,10 @@ function App() {
                 setItemsArrayFile,
                 itemsArrayHand,
                 setItemsArrayHand,
+                greedy,
+                setGreedy,
+                setTrongluong,
+                trongluong,
             }}
         >
             <GlobalStyles>

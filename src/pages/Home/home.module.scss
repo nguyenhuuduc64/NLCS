@@ -8,28 +8,25 @@
     line-height: 40px;
 }
 
+.content {
+    display: flex;
+}
+
 .input-container {
     display: flex;
     justify-content: center;
     flex-direction: row;
+    & > div {
+        height: 40px;
+        margin: 0 10px;
+    }
 }
 
 .input-file,
 .input-btn {
-    border: none;
-    text-align: center;
-    margin: 10px 10px;
     height: 40px;
-    line-height: 40px;
-    border-radius: 10px;
-    width: 200px;
+    width: 100px;
     background-color: #0c70cf;
-    font-weight: bolder;
-    color: white;
-    &:hover {
-        cursor: pointer;
-        background-color: #3983c9;
-    }
 }
 
 .table {
@@ -43,6 +40,7 @@
 .read-table-container {
     width: 50vw;
 }
+
 .input-table-container {
     display: flex;
     justify-content: center;
@@ -68,4 +66,8 @@
     background-color: beige;
     margin-left: auto;
     margin-right: auto;
+}
+
+.output-table-container {
+    width: 50vw;
 }

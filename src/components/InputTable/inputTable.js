@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Item } from '../../Items';
-import OutputTable from '../OutputTable/outputTable';
+import OutputTable from '../SortTable/sortTable';
 import styles from '../../../src/pages/Home/home.module.scss';
 import { itemsContext } from '../../App';
 function InputTable() {
