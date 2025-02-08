@@ -1,14 +1,15 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Item } from '../../Items';
-import OutputTable from '../SortTable/sortTable';
+import OutputTable from '../OutputTable/outputTable';
 import styles from '../../../src/pages/Home/home.module.scss';
 import { itemsContext } from '../../App';
+import { arrange } from '../function/arrange/arrange';
 function InputTable() {
     const [rowCount, setRowCount] = useState(0);
     const { itemsArrayHand, setItemsArrayHand, itemsArrayFile, setItemsArrayFile } = useContext(itemsContext);
     const [submit, setSubmit] = useState(false);
     const inputRef = useRef();
-    const [trongLuong, setTrongLuong] = useState(0);
+    const [trongLuong, setTrongluong] = useState(0);
     const handleInputChange = () => {
         const value = parseInt(inputRef.current.value, 10);
         if (!isNaN(value)) {
@@ -57,6 +58,8 @@ function InputTable() {
             </tr>,
         );
     }
+    const sortItems = arrange(itemsArrayHand);
+    console.log(sortItems);
 
     return (
         <div style={styles}>
@@ -71,7 +74,7 @@ function InputTable() {
                     <input
                         type="number"
                         placeholder="Nhập trọng lượng của ba lô"
-                        onChange={(e) => setTrongLuong(e.target.value)}
+                        onChange={(e) => setTrongluong(e.target.value)}
                     />
                     <table>
                         <thead>
@@ -93,14 +96,14 @@ function InputTable() {
                     <div>
                         <p>Trọng lượng: {trongLuong}</p>
                         <h1>Mảng đồ vật được nhập từ bàn phím</h1>
-                        <OutputTable sapxep={false} />
+                        <OutputTable sapxep={false} itemsArray={itemsArrayHand} />
                     </div>
                 )}
 
                 {submit && (
                     <div>
                         <h1>Mảng đồ vật sau khi được sắp xếp</h1>
-                        <OutputTable sapxep={true} />
+                        <OutputTable sapxep={true} itemsArray={sortItems} />
                     </div>
                 )}
             </div>

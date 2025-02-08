@@ -3,9 +3,10 @@ import styles from './home.module.scss';
 import { useContext, useRef, useState, useEffect } from 'react';
 import { Item } from '../../Items';
 import InputTable from '../../components/InputTable/inputTable';
-import OutputTable from '../../components/SortTable/sortTable';
+import OutputTable from '../../components/OutputTable/outputTable';
 import { itemsContext } from '../../App';
-import Greedy from '../../components/Greddy/greedy';
+import Greedy from '../../components/function/Greddy/greedy';
+import BranchAndBound from '../../components/function/BranchAndBound/branchandbounce';
 
 const cx = classNames.bind(styles);
 
@@ -149,6 +150,7 @@ function Home() {
                     <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                 </div>
                 <div>{greedy && <Greedy itemsArray={itemsArrayFile} />}</div>
+                <div>{branhAndBound && <BranchAndBound itemsArray={itemsArrayFile} />}</div>
             </div>
         </div>
     );

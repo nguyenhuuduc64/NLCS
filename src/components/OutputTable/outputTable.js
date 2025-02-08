@@ -3,8 +3,9 @@ import styles from '../../pages/Home/home.module.scss';
 import classNames from 'classnames/bind';
 import { itemsContext } from '../../App';
 import { current } from '@reduxjs/toolkit';
+import { arrange } from '../function/arrange/arrange';
 const cx = classNames.bind(styles);
-function SortTable({ sapxep, PA, itemsArray }) {
+function OutputTable({ sapxep, PA, itemsArray }) {
     const { itemsArrayFile, itemsArrayHand, greedy, trongluong, setTrongluong } = useContext(itemsContext);
 
     if (sapxep && itemsArray) {
@@ -13,16 +14,9 @@ function SortTable({ sapxep, PA, itemsArray }) {
             /*làm tròn đến số thập phân thứ 2 */
             itemsArray[i].DG = Math.round((itemsArray[i].GT / itemsArray[i].TL) * 100) / 100;
         }
+
         /*sắp xếp lại mảng */
-        for (let i = 0; i < itemsArray.length; i++) {
-            for (let j = i + 1; j < itemsArray.length; j++) {
-                if (itemsArray[i].DG < itemsArray[j].DG) {
-                    let temp = itemsArray[i];
-                    itemsArray[i] = itemsArray[j];
-                    itemsArray[j] = temp;
-                }
-            }
-        }
+        if (sapxep) itemsArray = arrange(itemsArray);
     }
 
     return (
@@ -35,6 +29,7 @@ function SortTable({ sapxep, PA, itemsArray }) {
                             <th>Trọng lượng</th>
                             <th>Giá trị</th>
                             {sapxep && <th>Đơn giá</th>}
+                            {PA && <th>Phương án</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +39,7 @@ function SortTable({ sapxep, PA, itemsArray }) {
                                 <td>{item.TL || 0}</td>
                                 <td>{item.GT || 0}</td>
                                 {sapxep && <td>{item.DG || 0}</td>}
+                                {PA && <td>{item.PA || 0}</td>}
                             </tr>
                         ))}
                     </tbody>
@@ -52,4 +48,4 @@ function SortTable({ sapxep, PA, itemsArray }) {
         </div>
     );
 }
-export default SortTable;
+export default OutputTable;

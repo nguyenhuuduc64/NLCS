@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect, useMemo } from 'react';
-import { itemsContext } from '../../App';
+import { itemsContext } from '../../../App';
 import classNames from 'classnames/bind';
-import styles from '../../../src/pages/Home/home.module.scss';
+import styles from '../../../pages/Home/home.module.scss';
+import { arrange } from '../arrange/arrange';
 
 const cx = classNames.bind(styles);
 
@@ -11,16 +12,7 @@ function Greedy({ itemsArray }) {
     const [solution, setSolution] = useState(Array(itemsArray.length).fill(0)); // Lưu PA
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
 
-    var sortedItems = [...itemsArray];
-    for (let i = 0; i < sortedItems.length; i++) {
-        for (let j = i + 1; j < sortedItems.length; j++) {
-            if (sortedItems[i].DG < sortedItems[j].DG) {
-                let temp = sortedItems[i];
-                sortedItems[i] = sortedItems[j];
-                sortedItems[j] = temp;
-            }
-        }
-    }
+    var sortedItems = arrange(itemsArray);
 
     useEffect(() => {
         if (currentIndex < sortedItems.length) {
@@ -69,7 +61,7 @@ function Greedy({ itemsArray }) {
                                     <td>{item.DG || 0}</td>
                                     <td
                                         style={{
-                                            backgroundColor: index === currentIndex ? 'red' : 'white',
+                                            backgroundColor: index === currentIndex ? 'red' : 'beige',
                                         }}
                                     >
                                         {solution[index]}
