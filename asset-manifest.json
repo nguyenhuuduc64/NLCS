@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/NLCS/static/css/main.0a2049d2.css",
-    "main.js": "/NLCS/static/js/main.aeb6fc2d.js",
+    "main.css": "/NLCS/static/css/main.517d74bf.css",
+    "main.js": "/NLCS/static/js/main.53b32b55.js",
     "index.html": "/NLCS/index.html",
-    "main.0a2049d2.css.map": "/NLCS/static/css/main.0a2049d2.css.map",
-    "main.aeb6fc2d.js.map": "/NLCS/static/js/main.aeb6fc2d.js.map"
+    "main.517d74bf.css.map": "/NLCS/static/css/main.517d74bf.css.map",
+    "main.53b32b55.js.map": "/NLCS/static/js/main.53b32b55.js.map"
   },
   "entrypoints": [
-    "static/css/main.0a2049d2.css",
-    "static/js/main.aeb6fc2d.js"
+    "static/css/main.517d74bf.css",
+    "static/js/main.53b32b55.js"
   ]
 }
