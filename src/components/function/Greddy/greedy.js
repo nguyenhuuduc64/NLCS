@@ -3,76 +3,55 @@ import { itemsContext } from '../../../App';
 import classNames from 'classnames/bind';
 import styles from '../../../pages/Home/home.module.scss';
 import { arrange } from '../arrange/arrange';
+import OutputTable from '../../OutputTable/outputTable';
 
 const cx = classNames.bind(styles);
 
 function Greedy({ itemsArray }) {
-    const { trongluong } = useContext(itemsContext);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [solution, setSolution] = useState(Array(itemsArray.length).fill(0)); // Lưu PA
+    const { trongluong, inputState, setInputState, greedy } = useContext(itemsContext);
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
+    const { currentIndex, setCurrentIndex } = useContext(itemsContext);
+    const [solution, setSolution] = useState(Array(itemsArray.length).fill(0)); // Lưu PA
 
     var sortedItems = arrange(itemsArray);
 
     useEffect(() => {
         if (currentIndex < sortedItems.length) {
             const id = setTimeout(() => {
+                var templePA;
+                templePA =
+                    Math.floor(remainingWeight / sortedItems[currentIndex].TL) > sortedItems[currentIndex].SL
+                        ? sortedItems[currentIndex].SL
+                        : Math.floor(remainingWeight / sortedItems[currentIndex].TL);
                 setSolution((prevSolution) => {
                     const newSolution = [...prevSolution];
-                    newSolution[currentIndex] = Math.floor(remainingWeight / sortedItems[currentIndex].TL);
+
+                    newSolution[currentIndex] = templePA;
+                    sortedItems[currentIndex].PA = newSolution[currentIndex];
                     return newSolution;
                 });
 
                 setRemainingWeight((prevWeight) => {
-                    return (
-                        prevWeight -
-                        sortedItems[currentIndex].TL * Math.floor(prevWeight / sortedItems[currentIndex].TL)
-                    );
+                    return prevWeight - sortedItems[currentIndex].TL * templePA;
                 });
 
-                setCurrentIndex((prev) => prev + 1);
+                setCurrentIndex((prev) => {
+                    return prev + 1;
+                });
             }, 1000);
 
             return () => clearTimeout(id);
         }
     }, [currentIndex, remainingWeight]); // Chỉ chạy khi `currentIndex` thay đổi
-
+    console.log(remainingWeight);
     return (
-        <>
-            <p>Trọng lượng còn lại: {remainingWeight}</p>
-            <div className={cx('output-table')}>
-                {sortedItems.length > 0 && (
-                    <table className={cx('table')}>
-                        <thead className={cx('thead')}>
-                            <tr>
-                                <th>Tên</th>
-                                <th>Trọng lượng</th>
-                                <th>Giá trị</th>
-                                <th>Đơn giá</th>
-                                <th>Phương án</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {sortedItems.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.ten || 'N/A'}</td>
-                                    <td>{item.TL || 0}</td>
-                                    <td>{item.GT || 0}</td>
-                                    <td>{item.DG || 0}</td>
-                                    <td
-                                        style={{
-                                            backgroundColor: index === currentIndex ? 'red' : 'beige',
-                                        }}
-                                    >
-                                        {solution[index]}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-        </>
+        <OutputTable
+            sapxep={true}
+            itemsArray={sortedItems}
+            PA={true}
+            currentIndex={currentIndex}
+            remainingWeight={remainingWeight}
+        />
     );
 }
 

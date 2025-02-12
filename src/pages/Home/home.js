@@ -14,6 +14,7 @@ function Home() {
     const [file, setFile] = useState(null);
     const [soluong, setSoluong] = useState(0);
     const {
+        setCurrentIndex,
         itemsArrayFile,
         setItemsArrayFile,
         itemArrayHand,
@@ -24,10 +25,10 @@ function Home() {
         setTrongluong,
         branhAndBound,
         setBranhAndBound,
-        dynamicProgramming,
-        setDynamicProgramming,
+
+        inputState,
+        setInputState,
     } = useContext(itemsContext);
-    const [inputState, setInputState] = useState(false);
 
     const [isDataReady, setIsDataReady] = useState(false);
     useEffect(() => {
@@ -56,10 +57,11 @@ function Home() {
                     .filter((line, index) => index != 0)
                     .map((line, index) => {
                         const itemTemple = new Item();
-                        const [ten, TL, GT] = line.split('\t'); // Giả sử mỗi dòng có 3 trường
-                        itemTemple.ten = ten;
+                        const [TL, GT, ten, SL] = line.split('\t'); // Giả sử mỗi dòng có 3 trường
                         itemTemple.TL = parseInt(TL);
                         itemTemple.GT = parseInt(GT);
+                        itemTemple.ten = ten;
+                        if (itemTemple.SL) itemTemple.SL = parseInt(SL);
                         return new Item(itemTemple);
                     });
                 setItemsArrayFile(items);
@@ -67,6 +69,7 @@ function Home() {
             reader.readAsText(file);
         }
     };
+
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -83,7 +86,10 @@ function Home() {
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
-                            setInputState((prev) => !prev);
+                            setInputState((prev) => {
+                                setItemsArrayFile([]);
+                                return !prev;
+                            });
                         }}
                     />
                     <label htmlFor="input-btn" className={cx('input-btn')}>
@@ -97,7 +103,10 @@ function Home() {
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
-                            setGreedy((prev) => !prev);
+                            setCurrentIndex(0);
+                            setGreedy((prev) => {
+                                return !prev;
+                            });
                         }}
                     />
                     <label htmlFor="greedy-btn" className={cx('input-btn')}>
@@ -136,21 +145,34 @@ function Home() {
                     {itemsArrayFile.length !== 0 && (
                         <div>
                             <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
-                            <p style={{ fontWeight: 'bolder' }}>trọng lượng của ba lô: {trongluong}</p>
-                            <OutputTable sapxep={false} PA={false} itemsArray={itemsArrayFile} />
+                            <OutputTable
+                                sapxep={false}
+                                PA={false}
+                                itemsArray={itemsArrayFile}
+                                remainingWeight={trongluong}
+                            />
                         </div>
                     )}
 
                     {itemsArrayFile.length !== 0 && (
                         <div>
                             <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
-                            <OutputTable sapxep={true} PA={false} itemsArray={itemsArrayFile} />
+                            <OutputTable
+                                sapxep={true}
+                                PA={false}
+                                itemsArray={itemsArrayFile}
+                                remainingWeight={trongluong}
+                            />
                         </div>
                     )}
                     <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                 </div>
-                <div>{greedy && <Greedy itemsArray={itemsArrayFile} />}</div>
-                <div>{branhAndBound && <BranchAndBound itemsArray={itemsArrayFile} />}</div>
+                <div className={cx('output-table-container')}>
+                    <h2>MẢNG ĐÒ VẬT PHƯƠNG ÁN</h2>
+
+                    <div>{greedy && <Greedy itemsArray={itemsArrayFile} />}</div>
+                    <div>{branhAndBound && <BranchAndBound itemsArray={itemsArrayFile} />}</div>
+                </div>
             </div>
         </div>
     );

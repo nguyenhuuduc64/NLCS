@@ -11,6 +11,10 @@ function App() {
     const [branhAndBound, setBranhAndBound] = useState(false);
     const [dynamicProgramming, setDynamicProgramming] = useState(false);
     const [trongluong, setTrongluong] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [inputState, setInputState] = useState(false);
+    const [parentIndex, setParentIndex] = useState(0);
+    const [bnbCurrentIndex, setBnbCurrentIndex] = useState(0);
     return (
         <itemsContext.Provider
             value={{
@@ -26,6 +30,14 @@ function App() {
                 setBranhAndBound,
                 dynamicProgramming,
                 setDynamicProgramming,
+                currentIndex,
+                setCurrentIndex,
+                inputState,
+                setInputState,
+                parentIndex,
+                setParentIndex,
+                bnbCurrentIndex,
+                setBnbCurrentIndex,
             }}
         >
             <GlobalStyles>
