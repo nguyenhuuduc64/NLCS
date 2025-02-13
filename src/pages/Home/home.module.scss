@@ -69,6 +69,14 @@
     background-color: beige;
     margin-left: auto;
     margin-right: auto;
+    border-collapse: collapse; /* Sửa lỗi từ "table-collapse" thành "border-collapse" */
+}
+
+.table th,
+.table td {
+    border: 1px solid gray; /* Viền của các ô trong bảng */
+    padding: 8px; /* Tạo khoảng cách giữa nội dung và viền */
+    text-align: center; /* Căn giữa nội dung trong ô */
 }
 
 .output-table-container {

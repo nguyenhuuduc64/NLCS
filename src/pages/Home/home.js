@@ -7,7 +7,7 @@ import OutputTable from '../../components/OutputTable/outputTable';
 import { itemsContext } from '../../App';
 import Greedy from '../../components/function/Greddy/greedy';
 import BranchAndBound from '../../components/function/BranchAndBound/branchandbounce';
-
+import { setPA } from '../../components/function/utils';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -28,6 +28,10 @@ function Home() {
 
         inputState,
         setInputState,
+        setTotalValueGreedy,
+        setTotalValueBnb,
+        totalValueGreedy,
+        totalValueBnb,
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
@@ -104,6 +108,8 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setCurrentIndex(0);
+                            setPA(itemsArrayFile);
+                            setTotalValueGreedy(0);
                             setGreedy((prev) => {
                                 return !prev;
                             });
@@ -119,6 +125,9 @@ function Home() {
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
+                            setTotalValueBnb(0);
+                            setPA(itemsArrayFile);
+
                             setBranhAndBound((prev) => !prev);
                         }}
                     />
@@ -168,8 +177,7 @@ function Home() {
                     <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                 </div>
                 <div className={cx('output-table-container')}>
-                    <h2>MẢNG ĐÒ VẬT PHƯƠNG ÁN</h2>
-
+                    {(greedy || branhAndBound) && <h2>MẢNG ĐỒ VẬT PHƯƠNG ÁN</h2>}
                     <div>{greedy && <Greedy itemsArray={itemsArrayFile} />}</div>
                     <div>{branhAndBound && <BranchAndBound itemsArray={itemsArrayFile} />}</div>
                 </div>

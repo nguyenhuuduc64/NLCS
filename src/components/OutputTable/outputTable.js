@@ -5,7 +5,7 @@ import { itemsContext } from '../../App';
 import { current } from '@reduxjs/toolkit';
 import { arrange } from '../function/arrange/arrange';
 const cx = classNames.bind(styles);
-function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight }) {
+function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, totalValue }) {
     const { itemsArrayFile, itemsArrayHand, greedy, trongluong, setTrongluong } = useContext(itemsContext);
     if (sapxep && itemsArray) {
         /*tạo đơn giá cho các đò vật */
@@ -44,7 +44,7 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight }) 
                                 {PA && (
                                     <td
                                         style={{
-                                            backgroundColor: currentIndex === index ? 'red' : 'white',
+                                            backgroundColor: index === currentIndex ? 'red' : 'beige',
                                         }}
                                     >
                                         {item.PA ?? 0}
@@ -55,6 +55,7 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight }) 
                     </tbody>
                 </table>
             )}
+            {PA && <p>Tổng giá trị: {totalValue}</p>}
         </div>
     );
 }

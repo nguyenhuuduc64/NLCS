@@ -6,80 +6,78 @@ import { arrange } from '../arrange/arrange';
 function BranchAndBound({ itemsArray }) {
     const {
         trongluong,
-        setTrongluong,
-        parentIndex,
         setParentIndex,
-        branhAndBound,
-        bnbCurrentIndex,
         setBnbCurrentIndex,
+        bnbCurrentIndex,
+        parentIndex,
+        totalValueBnb,
+        setTotalValueBnb,
     } = useContext(itemsContext);
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
 
+    // Sắp xếp danh sách vật phẩm
     itemsArray = arrange(itemsArray);
-
     const n = itemsArray.length;
-
-    let currentWeight = trongluong;
     let bestSolutions = Array(n).fill(0);
     let dsdv = [...itemsArray];
-    let TLConLai, CT, GiaLNTT, TGT;
-    const Chon = (TLConLai, TLVat) => {
-        return TLVat === 0 ? 0 : Math.floor(TLConLai / TLVat);
-    };
+    let GiaLNTT = 0.0;
 
-    const init = () => {
-        TLConLai = currentWeight;
-        CT = n > 0 ? currentWeight * dsdv[0].DG : 0;
-        GiaLNTT = 0.0;
-        TGT = 0.0;
-    };
+    const Chon = (TLConLai, TLVat) => (TLVat === 0 ? 0 : Math.floor(TLConLai / TLVat));
 
     const GhiNhanKiLuc = (newBestSolutions, newTGT) => {
         if (GiaLNTT < newTGT) {
             GiaLNTT = newTGT;
-            for (let i = 0; i < n; i++) {
-                dsdv[i].PA = newBestSolutions[i];
-            }
-            let templeTLConLai = trongluong;
-            dsdv.forEach((item, index) => {
-                templeTLConLai -= item.PA * item.TL;
-            });
-            setTimeout(() => {
-                setRemainingWeight(templeTLConLai);
-            }, 0);
+            dsdv.forEach((item, i) => (item.PA = newBestSolutions[i]));
+            let templeTLConLai = trongluong - dsdv.reduce((sum, item) => sum + item.PA * item.TL, 0);
+            let templeTGT = dsdv.reduce((sum, item) => sum + item.PA * item.GT, 0);
+            setRemainingWeight(templeTLConLai);
+            setTotalValueBnb(templeTGT);
         }
     };
+    useEffect(() => {
+        let TLConLai = trongluong;
+        let TGT = 0.0;
 
-    const Try = (i, TLConLai, TGT, bestSolutions) => {
-        if (i >= n) return;
+        const Try = (i, TLConLai, TGT, bestSolutions) => {
+            if (i >= n) return;
 
-        let templeChon = Chon(TLConLai, dsdv[i].TL) > dsdv[i].SL ? dsdv[i].SL : Chon(TLConLai, dsdv[i].TL);
-        for (let j = templeChon; j >= 0; j--) {
-            let newTGT = TGT + j * dsdv[i].GT;
-            let newTLConLai = TLConLai - j * dsdv[i].TL;
-            let newBestSolutions = [...bestSolutions]; // Tạo bản sao để không bị ghi đè
-            newBestSolutions[i] = j; // Cập nhật phương án của vật thứ i
-            let CT = newTGT + (i < n - 1 ? newTLConLai * dsdv[i + 1].DG : 0);
+            setTimeout(() => {
+                setParentIndex(i);
+            }, 100);
+            let templeChon;
 
-            if (CT > GiaLNTT) {
-                if (i === n - 1 || newTLConLai === 0) {
-                    GhiNhanKiLuc(newBestSolutions, newTGT);
-                } else {
-                    Try(i + 1, newTLConLai, newTGT, newBestSolutions);
+            if (dsdv[i].SL) templeChon = Math.min(Chon(TLConLai, dsdv[i].TL), dsdv[i].SL);
+            else templeChon = Chon(TLConLai, dsdv[i].TL);
+            for (let j = templeChon; j >= 0; j--) {
+                let newTGT = TGT + j * dsdv[i].GT;
+                let newTLConLai = TLConLai - j * dsdv[i].TL;
+                let newBestSolutions = [...bestSolutions];
+                newBestSolutions[i] = j;
+                let CT = newTGT + (i < n - 1 ? newTLConLai * dsdv[i + 1].DG : 0);
+
+                if (CT > GiaLNTT) {
+                    if (i === n - 1 || newTLConLai === 0) {
+                        GhiNhanKiLuc(newBestSolutions, newTGT);
+                    } else {
+                        setTimeout(() => {
+                            Try(i + 1, newTLConLai, newTGT, newBestSolutions);
+                        }, 500); // Delay giúp UI dễ thấy hơn
+                    }
                 }
             }
-        }
-    };
+        };
 
-    init();
-    Try(0, TLConLai, TGT, bestSolutions);
+        Try(0, TLConLai, TGT, bestSolutions);
+    }, [trongluong]); // useEffect chạy lại khi `trongluong` thay đổi
+
     return (
         <OutputTable
             sapxep={true}
             itemsArray={dsdv}
             PA={true}
             remainingWeight={remainingWeight}
-            currentIndex={parentIndex}
+            currentIndex={parentIndex} // Node con
+            totalValue={totalValueBnb}
         />
     );
 }

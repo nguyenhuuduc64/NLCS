@@ -4,15 +4,15 @@ import classNames from 'classnames/bind';
 import styles from '../../../pages/Home/home.module.scss';
 import { arrange } from '../arrange/arrange';
 import OutputTable from '../../OutputTable/outputTable';
-
+import { setPA } from '../utils';
 const cx = classNames.bind(styles);
 
 function Greedy({ itemsArray }) {
-    const { trongluong, inputState, setInputState, greedy } = useContext(itemsContext);
+    const { trongluong, inputState, setInputState, greedy, totalValueGreedy, setTotalValueGreedy } =
+        useContext(itemsContext);
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
     const { currentIndex, setCurrentIndex } = useContext(itemsContext);
     const [solution, setSolution] = useState(Array(itemsArray.length).fill(0)); // Lưu PA
-
     var sortedItems = arrange(itemsArray);
 
     useEffect(() => {
@@ -30,6 +30,9 @@ function Greedy({ itemsArray }) {
                     sortedItems[currentIndex].PA = newSolution[currentIndex];
                     return newSolution;
                 });
+
+                let templeTotalValue = totalValueGreedy + sortedItems[currentIndex].GT * templePA;
+                setTotalValueGreedy(templeTotalValue);
 
                 setRemainingWeight((prevWeight) => {
                     return prevWeight - sortedItems[currentIndex].TL * templePA;
@@ -51,6 +54,7 @@ function Greedy({ itemsArray }) {
             PA={true}
             currentIndex={currentIndex}
             remainingWeight={remainingWeight}
+            totalValue={totalValueGreedy}
         />
     );
 }
