@@ -66,6 +66,7 @@ function Home() {
                         itemTemple.GT = parseInt(GT);
                         itemTemple.ten = ten;
                         if (itemTemple.SL) itemTemple.SL = parseInt(SL);
+                        itemTemple.id = index;
                         return new Item(itemTemple);
                     });
                 setItemsArrayFile(items);
@@ -73,7 +74,6 @@ function Home() {
             reader.readAsText(file);
         }
     };
-
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -108,7 +108,6 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setCurrentIndex(0);
-                            setPA(itemsArrayFile);
                             setTotalValueGreedy(0);
                             setGreedy((prev) => {
                                 return !prev;
@@ -126,7 +125,6 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setTotalValueBnb(0);
-                            setPA(itemsArrayFile);
 
                             setBranhAndBound((prev) => !prev);
                         }}

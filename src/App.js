@@ -49,6 +49,7 @@ function App() {
         >
             <GlobalStyles>
                 <div className="App">
+                    {' '}
                     <Home />
                 </div>
             </GlobalStyles>

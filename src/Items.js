@@ -8,6 +8,7 @@ export class Item {
             this.DG = A.DG;
             this.SL = A.SL;
             this.PA = A.PA;
+            this.id = A.id;
         } else {
             // Nếu không có đối tượng A, sử dụng giá trị mặc định
             this.ten = '';
@@ -16,6 +17,7 @@ export class Item {
             this.DG = 0;
             this.SL = 1;
             this.PA = 0;
+            this.id = 0;
         }
     }
 }

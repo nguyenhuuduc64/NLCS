@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import styles from '../../pages/Home/home.module.scss';
 import classNames from 'classnames/bind';
 import { itemsContext } from '../../App';
-import { current } from '@reduxjs/toolkit';
 import { arrange } from '../function/arrange/arrange';
+
 const cx = classNames.bind(styles);
+
 function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, totalValue }) {
-    const { itemsArrayFile, itemsArrayHand, greedy, trongluong, setTrongluong } = useContext(itemsContext);
-    if (sapxep && itemsArray) {
+    if (itemsArray) {
         /*tạo đơn giá cho các đò vật */
         for (let i = 0; i < itemsArray.length; i++) {
             /*làm tròn đến số thập phân thứ 2 */
@@ -17,6 +17,9 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
         /*sắp xếp lại mảng */
         if (sapxep) itemsArray = arrange(itemsArray);
     }
+
+    // Check if any item has a valid SL value
+    const hasValidSL = itemsArray.some((item) => item.SL !== null && !isNaN(item.SL));
 
     return (
         <div>
@@ -28,7 +31,7 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
                             <th>Tên</th>
                             <th>Trọng lượng</th>
                             <th>Giá trị</th>
-                            {!isNaN(itemsArray[0].SL) && <th>Số lượng</th>}
+                            {hasValidSL && <th>Số lượng</th>}
                             {sapxep && <th>Đơn giá</th>}
                             {PA && <th>Phương án</th>}
                         </tr>
@@ -39,7 +42,7 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
                                 <td>{item.ten || 'N/A'}</td>
                                 <td>{item.TL || 0}</td>
                                 <td>{item.GT || 0}</td>
-                                {!isNaN(item.SL) && <td>{item.SL}</td>}
+                                {hasValidSL && <td>{item.SL}</td>}
                                 {sapxep && <td>{item.DG || 0}</td>}
                                 {PA && (
                                     <td
@@ -59,4 +62,5 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
         </div>
     );
 }
+
 export default OutputTable;

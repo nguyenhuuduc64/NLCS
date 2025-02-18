@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import styles from '../../../pages/Home/home.module.scss';
 import { arrange } from '../arrange/arrange';
 import OutputTable from '../../OutputTable/outputTable';
-import { setPA } from '../utils';
+import { setPA, setSolutionBeforeSort, setSolutionForItemsArray } from '../utils';
 const cx = classNames.bind(styles);
 
 function Greedy({ itemsArray }) {
@@ -12,17 +12,20 @@ function Greedy({ itemsArray }) {
         useContext(itemsContext);
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
     const { currentIndex, setCurrentIndex } = useContext(itemsContext);
-    const [solution, setSolution] = useState(Array(itemsArray.length).fill(0)); // Lưu PA
-    var sortedItems = arrange(itemsArray);
-
+    const [solution, setSolution] = useState(Array(itemsArray.length).fill(0));
+    // Lưu PA
+    const templeItemsArray = useMemo(() => arrange(itemsArray), [itemsArray]);
+    const sortedItems = JSON.parse(JSON.stringify(templeItemsArray));
     useEffect(() => {
         if (currentIndex < sortedItems.length) {
             const id = setTimeout(() => {
                 var templePA;
                 templePA =
-                    Math.floor(remainingWeight / sortedItems[currentIndex].TL) > sortedItems[currentIndex].SL
+                    Math.floor(sortedItems[currentIndex].SL && remainingWeight / sortedItems[currentIndex].TL) >
+                    sortedItems[currentIndex].SL
                         ? sortedItems[currentIndex].SL
                         : Math.floor(remainingWeight / sortedItems[currentIndex].TL);
+
                 setSolution((prevSolution) => {
                     const newSolution = [...prevSolution];
 
@@ -30,7 +33,6 @@ function Greedy({ itemsArray }) {
                     sortedItems[currentIndex].PA = newSolution[currentIndex];
                     return newSolution;
                 });
-
                 let templeTotalValue = totalValueGreedy + sortedItems[currentIndex].GT * templePA;
                 setTotalValueGreedy(templeTotalValue);
 
@@ -38,18 +40,17 @@ function Greedy({ itemsArray }) {
                     return prevWeight - sortedItems[currentIndex].TL * templePA;
                 });
 
-                setCurrentIndex((prev) => {
-                    return prev + 1;
-                });
+                setCurrentIndex((prev) => prev + 1);
             }, 1000);
 
             return () => clearTimeout(id);
         }
     }, [currentIndex, remainingWeight]); // Chỉ chạy khi `currentIndex` thay đổi
-    console.log(remainingWeight);
+    setSolutionForItemsArray(sortedItems, solution);
+    let resultItemsArray = setSolutionBeforeSort(sortedItems, itemsArray);
     return (
         <OutputTable
-            sapxep={true}
+            sapxep={false}
             itemsArray={sortedItems}
             PA={true}
             currentIndex={currentIndex}

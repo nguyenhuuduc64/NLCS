@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { itemsContext } from '../../../App';
 import OutputTable from '../../OutputTable/outputTable';
 import { arrange } from '../arrange/arrange';
+import { setPA } from '../utils';
 
 function BranchAndBound({ itemsArray }) {
     const {
@@ -12,6 +13,7 @@ function BranchAndBound({ itemsArray }) {
         parentIndex,
         totalValueBnb,
         setTotalValueBnb,
+        branchAndBound,
     } = useContext(itemsContext);
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
 
@@ -19,7 +21,14 @@ function BranchAndBound({ itemsArray }) {
     itemsArray = arrange(itemsArray);
     const n = itemsArray.length;
     let bestSolutions = Array(n).fill(0);
-    let dsdv = [...itemsArray];
+    const [dsdv, setDsdv] = useState(() => JSON.parse(JSON.stringify(itemsArray)));
+
+    useEffect(() => {
+        // Mỗi khi branchAndBound thay đổi, reset dsdv
+        let newArr = JSON.parse(JSON.stringify(itemsArray));
+        setPA(newArr);
+        setDsdv(newArr);
+    }, []);
     let GiaLNTT = 0.0;
 
     const Chon = (TLConLai, TLVat) => (TLVat === 0 ? 0 : Math.floor(TLConLai / TLVat));
@@ -27,7 +36,9 @@ function BranchAndBound({ itemsArray }) {
     const GhiNhanKiLuc = (newBestSolutions, newTGT) => {
         if (GiaLNTT < newTGT) {
             GiaLNTT = newTGT;
-            dsdv.forEach((item, i) => (item.PA = newBestSolutions[i]));
+            const updatedDsdv = dsdv.map((item, i) => ({ ...item, PA: newBestSolutions[i] }));
+            setDsdv(updatedDsdv);
+
             let templeTLConLai = trongluong - dsdv.reduce((sum, item) => sum + item.PA * item.TL, 0);
             let templeTGT = dsdv.reduce((sum, item) => sum + item.PA * item.GT, 0);
             setRemainingWeight(templeTLConLai);
@@ -68,7 +79,7 @@ function BranchAndBound({ itemsArray }) {
         };
 
         Try(0, TLConLai, TGT, bestSolutions);
-    }, [trongluong]); // useEffect chạy lại khi `trongluong` thay đổi
+    }, [trongluong, branchAndBound]); // useEffect chạy lại khi `trongluong` thay đổi
 
     return (
         <OutputTable
