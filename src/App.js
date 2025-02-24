@@ -17,7 +17,8 @@ function App() {
     const [bnbCurrentIndex, setBnbCurrentIndex] = useState(0);
     const [totalValueGreedy, setTotalValueGreedy] = useState(0);
     const [totalValueBnb, setTotalValueBnb] = useState(0);
-
+    const [itemsArrayHandState, setItemsArrayHandState] = useState(false);
+    const [itemsArrayFileState, setItemsArrayFileState] = useState(false);
     return (
         <itemsContext.Provider
             value={{
@@ -45,6 +46,10 @@ function App() {
                 setTotalValueGreedy,
                 totalValueBnb,
                 setTotalValueBnb,
+                itemsArrayHandState,
+                setItemsArrayHandState,
+                itemsArrayFileState,
+                setItemsArrayFileState,
             }}
         >
             <GlobalStyles>

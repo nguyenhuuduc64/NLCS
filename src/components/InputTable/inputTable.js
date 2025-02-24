@@ -6,7 +6,8 @@ import { itemsContext } from '../../App';
 import { arrange } from '../function/arrange/arrange';
 function InputTable() {
     const [rowCount, setRowCount] = useState(0);
-    const { itemsArrayHand, setItemsArrayHand, itemsArrayFile, setItemsArrayFile } = useContext(itemsContext);
+    const { itemsArrayHand, setItemsArrayHand, itemsArrayFile, setItemsArrayFile, itemsArrayHandState } =
+        useContext(itemsContext);
     const [submit, setSubmit] = useState(false);
     const inputRef = useRef();
     const [trongLuong, setTrongluong] = useState(0);
@@ -59,11 +60,10 @@ function InputTable() {
         );
     }
     const sortItems = arrange(itemsArrayHand);
-    console.log(sortItems);
-
+    console.log('itemArrayhandState', itemsArrayHandState, 'submit', submit);
     return (
         <div style={styles}>
-            {!submit && (
+            {!submit && itemsArrayHandState && (
                 <div>
                     <input
                         type="number"
@@ -97,13 +97,6 @@ function InputTable() {
                         <p>Trọng lượng: {trongLuong}</p>
                         <h1>Mảng đồ vật được nhập từ bàn phím</h1>
                         <OutputTable sapxep={false} itemsArray={itemsArrayHand} />
-                    </div>
-                )}
-
-                {submit && (
-                    <div>
-                        <h1>Mảng đồ vật sau khi được sắp xếp</h1>
-                        <OutputTable sapxep={true} itemsArray={sortItems} />
                     </div>
                 )}
             </div>

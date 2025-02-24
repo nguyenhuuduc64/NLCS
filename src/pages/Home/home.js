@@ -22,7 +22,7 @@ function Home() {
         setCurrentIndex,
         itemsArrayFile,
         setItemsArrayFile,
-        itemArrayHand,
+        itemsArrayHand,
         setItemsArrayHand,
         greedy,
         setGreedy,
@@ -38,6 +38,11 @@ function Home() {
         setTotalValueBnb,
         totalValueGreedy,
         totalValueBnb,
+        itemsArrayHandState,
+        setItemsArrayHandState,
+        itemsArrayFileState,
+
+        setItemsArrayFileState,
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
@@ -45,10 +50,10 @@ function Home() {
         if (itemsArrayFile && itemsArrayFile.length > 0) {
             setIsDataReady(true);
         }
-        if (itemArrayHand && itemArrayHand.length > 0) {
+        if (itemsArrayHand && itemsArrayHand.length > 0) {
             setIsDataReady(true);
         }
-    }, [itemsArrayFile, itemArrayHand]);
+    }, [itemsArrayFile, itemsArrayHand]);
     //sau khi cập nhật lại itemsArrayFIle hoặc itemsArrayHand thì useEffect sẽ chạy và set Data về true.
     //ban đầu ở lần render đầu tiên thì useEffect chưa nhận ra sự thay đổi của itemsArrayFile hoặc itemsArrayHand nên chưa chạy code bên trongtrong
     const handleFileChange = (e) => {
@@ -80,12 +85,24 @@ function Home() {
             reader.readAsText(file);
         }
     };
+
+    const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
+    console.log(itemsArray);
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
             <div className={cx('input-container')}>
                 <div>
-                    <input id="input-file" style={{ display: 'none' }} type="file" onChange={handleFileChange} />
+                    <input
+                        id="input-file"
+                        style={{ display: 'none' }}
+                        type="file"
+                        onChange={(e) => {
+                            setItemsArrayHandState(false);
+                            setItemsArrayHand([]);
+                            handleFileChange(e);
+                        }}
+                    />
                     <label htmlFor="input-file" className={cx('input-file')}>
                         Chọn tập tin
                     </label>
@@ -96,14 +113,15 @@ function Home() {
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
-                            setInputState((prev) => {
-                                setItemsArrayFile([]);
+                            setItemsArrayHandState((prev) => {
                                 return !prev;
                             });
+                            setItemsArrayFileState(false);
+                            setItemsArrayFile([]);
                         }}
                     />
                     <label htmlFor="input-btn" className={cx('input-btn')}>
-                        Nhập thông tin đồ vật
+                        Nhập thủ công
                     </label>
                 </div>
                 <div>
@@ -114,6 +132,7 @@ function Home() {
                         onClick={() => {
                             setArrangeState((prev) => !prev);
                             arrange(itemsArrayFile);
+                            arrange(itemsArrayHand);
                         }}
                     />
                     <label htmlFor="arrange" className={cx('input-btn')}>
@@ -178,6 +197,7 @@ function Home() {
             </div>
             <div className={cx('content')}>
                 <div className={cx('read-table-container')}>
+                    {itemsArrayHandState && <InputTable />}
                     {itemsArrayFile.length !== 0 && (
                         <div>
                             <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
@@ -190,21 +210,20 @@ function Home() {
                         </div>
                     )}
 
-                    {itemsArrayFile.length !== 0 && (
-                        <div>
-                            {arrangeState && (
-                                <>
-                                    <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
-                                    <OutputTable
-                                        sapxep={true}
-                                        PA={false}
-                                        itemsArray={itemsArrayFile}
-                                        remainingWeight={trongluong}
-                                    />
-                                </>
-                            )}
-                        </div>
-                    )}
+                    <div>
+                        {arrangeState && itemsArray && (
+                            <>
+                                <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
+                                <OutputTable
+                                    sapxep={true}
+                                    PA={false}
+                                    itemsArray={itemsArray}
+                                    remainingWeight={trongluong}
+                                />
+                            </>
+                        )}
+                    </div>
+
                     <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                 </div>
                 <div className={cx('output-table-container')}>
