@@ -10,48 +10,60 @@ const cx = classNames.bind(styles);
 function Greedy({ itemsArray }) {
     const { trongluong, inputState, setInputState, greedy, totalValueGreedy, setTotalValueGreedy } =
         useContext(itemsContext);
-    const [remainingWeight, setRemainingWeight] = useState(trongluong);
+    console.log(typeof trongluong);
+    const [remainingWeight, setRemainingWeight] = useState(parseInt(trongluong));
     const { currentIndex, setCurrentIndex } = useContext(itemsContext);
     const [solution, setSolution] = useState(Array(itemsArray.length).fill(0));
-    // Lưu PA
-    const templeItemsArray = useMemo(() => arrange(itemsArray), [itemsArray]);
-    const sortedItems = JSON.parse(JSON.stringify(templeItemsArray));
+
+    const sortedItems = arrange(itemsArray);
+    const [dsdv, setDsdv] = useState(() => JSON.parse(JSON.stringify(sortedItems)));
+
     useEffect(() => {
-        if (currentIndex < sortedItems.length) {
+        // Mỗi khi branchAndBound thay đổi, reset dsdv
+        let newArr = JSON.parse(JSON.stringify(sortedItems));
+        setCurrentIndex(0);
+        setTotalValueGreedy(0);
+        setPA(newArr);
+        setDsdv(newArr);
+    }, [greedy]);
+    useEffect(() => {
+        if (currentIndex < dsdv.length) {
             const id = setTimeout(() => {
                 var templePA;
                 templePA =
-                    Math.floor(sortedItems[currentIndex].SL && remainingWeight / sortedItems[currentIndex].TL) >
-                    sortedItems[currentIndex].SL
-                        ? sortedItems[currentIndex].SL
-                        : Math.floor(remainingWeight / sortedItems[currentIndex].TL);
+                    Math.floor(dsdv[currentIndex].SL && remainingWeight / dsdv[currentIndex].TL) > dsdv[currentIndex].SL
+                        ? dsdv[currentIndex].SL
+                        : Math.floor(remainingWeight / dsdv[currentIndex].TL);
 
                 setSolution((prevSolution) => {
                     const newSolution = [...prevSolution];
-
                     newSolution[currentIndex] = templePA;
-                    sortedItems[currentIndex].PA = newSolution[currentIndex];
+
+                    setDsdv((prevDsdv) => {
+                        const newDsdv = [...prevDsdv];
+                        newDsdv[currentIndex] = { ...newDsdv[currentIndex], PA: templePA };
+                        return newDsdv;
+                    });
+
                     return newSolution;
                 });
-                let templeTotalValue = totalValueGreedy + sortedItems[currentIndex].GT * templePA;
+
+                let templeTotalValue = totalValueGreedy + dsdv[currentIndex].GT * templePA;
                 setTotalValueGreedy(templeTotalValue);
 
-                setRemainingWeight((prevWeight) => {
-                    return prevWeight - sortedItems[currentIndex].TL * templePA;
-                });
+                setRemainingWeight((prevWeight) => prevWeight - dsdv[currentIndex].TL * templePA);
 
                 setCurrentIndex((prev) => prev + 1);
-            }, 1000);
+            }, 500);
 
             return () => clearTimeout(id);
         }
-    }, [currentIndex, remainingWeight]); // Chỉ chạy khi `currentIndex` thay đổi
-    setSolutionForItemsArray(sortedItems, solution);
-    let resultItemsArray = setSolutionBeforeSort(sortedItems, itemsArray);
+    }, [currentIndex]); // Chỉ chạy khi `currentIndex` thay đổi
+    console.log('remainingweigt', remainingWeight);
     return (
         <OutputTable
-            sapxep={false}
-            itemsArray={sortedItems}
+            sapxep={true}
+            itemsArray={dsdv}
             PA={true}
             currentIndex={currentIndex}
             remainingWeight={remainingWeight}

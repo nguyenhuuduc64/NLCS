@@ -8,11 +8,16 @@ import { itemsContext } from '../../App';
 import Greedy from '../../components/function/Greddy/greedy';
 import BranchAndBound from '../../components/function/BranchAndBound/branchandbounce';
 import { setPA } from '../../components/function/utils';
+import DynamicProgramming from '../../components/function/DynamicProgramming/DynamicProgramming';
+import Compare from '../../components/Compare/compare';
+import { arrange } from '../../components/function/arrange/arrange';
 const cx = classNames.bind(styles);
 
 function Home() {
     const [file, setFile] = useState(null);
     const [soluong, setSoluong] = useState(0);
+    const [compare, setCompare] = useState(false);
+    const [arrangeState, setArrangeState] = useState(false);
     const {
         setCurrentIndex,
         itemsArrayFile,
@@ -25,7 +30,8 @@ function Home() {
         setTrongluong,
         branhAndBound,
         setBranhAndBound,
-
+        dynamicProgramming,
+        setDynamicProgramming,
         inputState,
         setInputState,
         setTotalValueGreedy,
@@ -100,15 +106,26 @@ function Home() {
                         Nhập thông tin đồ vật
                     </label>
                 </div>
-
+                <div>
+                    <input
+                        id="arrange"
+                        type="button"
+                        style={{ display: 'none' }}
+                        onClick={() => {
+                            setArrangeState((prev) => !prev);
+                            arrange(itemsArrayFile);
+                        }}
+                    />
+                    <label htmlFor="arrange" className={cx('input-btn')}>
+                        Sắp xếp theo đơn giá
+                    </label>
+                </div>
                 <div>
                     <input
                         id="greedy-btn"
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
-                            setCurrentIndex(0);
-                            setTotalValueGreedy(0);
                             setGreedy((prev) => {
                                 return !prev;
                             });
@@ -139,11 +156,23 @@ function Home() {
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
-                            setBranhAndBound((prev) => !prev);
+                            setDynamicProgramming((prev) => !prev);
                         }}
                     />
                     <label htmlFor="dynamicpg-btn" className={cx('input-btn')}>
                         Thuật toán quy hoạch động
+                    </label>
+                </div>
+                <div>
+                    <input
+                        id="compare-btn"
+                        style={{ display: 'none' }}
+                        onClick={() => {
+                            setCompare((prev) => !prev);
+                        }}
+                    />
+                    <label htmlFor="compare-btn" className={cx('input-file')}>
+                        So sánh
                     </label>
                 </div>
             </div>
@@ -163,23 +192,29 @@ function Home() {
 
                     {itemsArrayFile.length !== 0 && (
                         <div>
-                            <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
-                            <OutputTable
-                                sapxep={true}
-                                PA={false}
-                                itemsArray={itemsArrayFile}
-                                remainingWeight={trongluong}
-                            />
+                            {arrangeState && (
+                                <>
+                                    <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
+                                    <OutputTable
+                                        sapxep={true}
+                                        PA={false}
+                                        itemsArray={itemsArrayFile}
+                                        remainingWeight={trongluong}
+                                    />
+                                </>
+                            )}
                         </div>
                     )}
                     <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                 </div>
                 <div className={cx('output-table-container')}>
-                    {(greedy || branhAndBound) && <h2>MẢNG ĐỒ VẬT PHƯƠNG ÁN</h2>}
+                    {(greedy || branhAndBound || dynamicProgramming) && <h2>MẢNG ĐỒ VẬT PHƯƠNG ÁN</h2>}
                     <div>{greedy && <Greedy itemsArray={itemsArrayFile} />}</div>
                     <div>{branhAndBound && <BranchAndBound itemsArray={itemsArrayFile} />}</div>
+                    <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArrayFile} />}</div>
                 </div>
             </div>
+            <div>{compare && <Compare itemsArray={itemsArrayFile} />}</div>
         </div>
     );
 }

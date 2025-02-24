@@ -16,8 +16,8 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
+    margin-top: 20px;
     & > div {
-        height: 40px;
         margin: 0 10px;
     }
 }
@@ -25,8 +25,22 @@
 .input-file,
 .input-btn {
     height: 40px;
-    width: 100px;
     background-color: #0c70cf;
+}
+
+label {
+    color: #ffffff;
+    font-weight: bolder;
+    cursor: pointer;
+    height: 40px;
+    display: block;
+    line-height: 40px;
+    padding: 0 10px;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: #014788;
+    }
 }
 
 .table {
@@ -81,4 +95,17 @@
 
 .output-table-container {
     width: 50vw;
+}
+
+/*chuc nang so sanh*/
+
+.compare-wrapper {
+    width: 100vw;
+    display: flex !important;
+    position: absolute;
+    flex-direction: row;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(212, 212, 212);
 }
