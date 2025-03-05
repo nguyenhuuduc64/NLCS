@@ -11,12 +11,12 @@ import { setPA } from '../../components/function/utils';
 import DynamicProgramming from '../../components/function/DynamicProgramming/DynamicProgramming';
 import Compare from '../../components/Compare/compare';
 import { arrange } from '../../components/function/arrange/arrange';
+import ExportTextFile from '../../components/ExportTextFile/exportTextFile';
 const cx = classNames.bind(styles);
 
 function Home() {
     const [file, setFile] = useState(null);
     const [soluong, setSoluong] = useState(0);
-    const [compare, setCompare] = useState(false);
     const [arrangeState, setArrangeState] = useState(false);
     const {
         setCurrentIndex,
@@ -43,6 +43,12 @@ function Home() {
         itemsArrayFileState,
 
         setItemsArrayFileState,
+        compare,
+        setCompare,
+        Export,
+        setExport,
+        exportArrayResult,
+        setExportArrayResult,
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
@@ -87,7 +93,6 @@ function Home() {
     };
 
     const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
-    console.log(itemsArray);
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -194,6 +199,9 @@ function Home() {
                         So sánh
                     </label>
                 </div>
+                <div>
+                    <ExportTextFile data={exportArrayResult} />
+                </div>
             </div>
             <div className={cx('content')}>
                 <div className={cx('read-table-container')}>
@@ -228,9 +236,9 @@ function Home() {
                 </div>
                 <div className={cx('output-table-container')}>
                     {(greedy || branhAndBound || dynamicProgramming) && <h2>MẢNG ĐỒ VẬT PHƯƠNG ÁN</h2>}
-                    <div>{greedy && <Greedy itemsArray={itemsArrayFile} />}</div>
-                    <div>{branhAndBound && <BranchAndBound itemsArray={itemsArrayFile} />}</div>
-                    <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArrayFile} />}</div>
+                    <div>{greedy && <Greedy itemsArray={itemsArray} />}</div>
+                    <div>{branhAndBound && <BranchAndBound itemsArray={itemsArray} />}</div>
+                    <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArray} />}</div>
                 </div>
             </div>
             <div>{compare && <Compare itemsArray={itemsArrayFile} />}</div>

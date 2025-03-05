@@ -8,7 +8,7 @@ import { setPA } from '../utils';
 const cx = classNames.bind(styles);
 
 function DynamicProgramming({ itemsArray }) {
-    const { trongluong, dynamicProgramming } = useContext(itemsContext);
+    const { trongluong, dynamicProgramming, exportArrayResult, setExportArrayResult } = useContext(itemsContext);
     const n = itemsArray.length; // Kích thước của mảng items
     const W = parseInt(trongluong); // Trọng lượng tối đa
     // Khởi tạo bảng F và X
@@ -56,17 +56,17 @@ function DynamicProgramming({ itemsArray }) {
         console.log(typeof W);
         for (let k = n - 1; k >= 0; k--) {
             dsdv[k].PA = X[k][V];
-            //console.log(`X[${k}][${V}] = ${X[k][V]}`);
             V -= X[k][V] * dsdv[k].TL;
         }
     };
-    // Gọi hàm để thực thi lập trình động
     TaoBang(dsdv, n, W, F, X);
     TraBang(dsdv, n, W, X);
     console.log('X', X);
     console.log('F', F);
     const totalValue = F[n - 1][W];
     const remainingWeight = W - dsdv.reduce((acc, item) => acc + item.PA * item.TL, 0);
+    /**********************làm cho export arrayarray */
+    setExportArrayResult(dsdv);
     return (
         <div className={cx('')}>
             <OutputTable

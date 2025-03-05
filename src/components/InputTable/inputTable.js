@@ -6,11 +6,17 @@ import { itemsContext } from '../../App';
 import { arrange } from '../function/arrange/arrange';
 function InputTable() {
     const [rowCount, setRowCount] = useState(0);
-    const { itemsArrayHand, setItemsArrayHand, itemsArrayFile, setItemsArrayFile, itemsArrayHandState } =
-        useContext(itemsContext);
+    const {
+        itemsArrayHand,
+        setItemsArrayHand,
+        itemsArrayFile,
+        setItemsArrayFile,
+        itemsArrayHandState,
+        trongLuong,
+        setTrongluong,
+    } = useContext(itemsContext);
     const [submit, setSubmit] = useState(false);
     const inputRef = useRef();
-    const [trongLuong, setTrongluong] = useState(0);
     const handleInputChange = () => {
         const value = parseInt(inputRef.current.value, 10);
         if (!isNaN(value)) {
@@ -59,8 +65,8 @@ function InputTable() {
             </tr>,
         );
     }
+    console.log(itemsArrayHand);
     const sortItems = arrange(itemsArrayHand);
-    console.log('itemArrayhandState', itemsArrayHandState, 'submit', submit);
     return (
         <div style={styles}>
             {!submit && itemsArrayHandState && (
@@ -78,11 +84,13 @@ function InputTable() {
                     />
                     <table>
                         <thead>
-                            <tr>
-                                <th>Tên</th>
-                                <th>Trọng lượng</th>
-                                <th>Giá trị</th>
-                            </tr>
+                            {rows.length > 0 && (
+                                <tr>
+                                    <th>Tên</th>
+                                    <th>Trọng lượng</th>
+                                    <th>Giá trị</th>
+                                </tr>
+                            )}
                         </thead>
                         <tbody>{rows}</tbody>
                     </table>
@@ -96,7 +104,7 @@ function InputTable() {
                     <div>
                         <p>Trọng lượng: {trongLuong}</p>
                         <h1>Mảng đồ vật được nhập từ bàn phím</h1>
-                        <OutputTable sapxep={false} itemsArray={itemsArrayHand} />
+                        <OutputTable sapxep={false} itemsArray={itemsArrayHand} remainingWeight={trongLuong} />
                     </div>
                 )}
             </div>

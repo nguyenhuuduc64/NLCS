@@ -8,8 +8,16 @@ import { setPA, setSolutionBeforeSort, setSolutionForItemsArray } from '../utils
 const cx = classNames.bind(styles);
 
 function Greedy({ itemsArray }) {
-    const { trongluong, inputState, setInputState, greedy, totalValueGreedy, setTotalValueGreedy } =
-        useContext(itemsContext);
+    const {
+        trongluong,
+        inputState,
+        setInputState,
+        greedy,
+        totalValueGreedy,
+        setTotalValueGreedy,
+        exportArrayResult,
+        setExportArrayResult,
+    } = useContext(itemsContext);
     console.log(typeof trongluong);
     const [remainingWeight, setRemainingWeight] = useState(parseInt(trongluong));
     const { currentIndex, setCurrentIndex } = useContext(itemsContext);
@@ -58,8 +66,9 @@ function Greedy({ itemsArray }) {
 
             return () => clearTimeout(id);
         }
-    }, [currentIndex]); // Chỉ chạy khi `currentIndex` thay đổi
-    console.log('remainingweigt', remainingWeight);
+    }, [currentIndex]);
+    /*****************************lam cho export array */
+    setExportArrayResult(dsdv);
     return (
         <OutputTable
             sapxep={true}

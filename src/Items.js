@@ -15,7 +15,6 @@ export class Item {
             this.TL = 0;
             this.GT = 0;
             this.DG = 0;
-            this.SL = 1;
             this.PA = 0;
             this.id = 0;
         }

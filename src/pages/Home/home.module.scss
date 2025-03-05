@@ -1,3 +1,21 @@
+/******************/
+/* Cho trình duyệt WebKit (Chrome, Safari, Edge mới) */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Cho Firefox */
+html {
+    scrollbar-width: none;
+}
+
+/* Cho Internet Explorer & Edge cũ */
+body {
+    -ms-overflow-style: none;
+}
+
+/******************/
+
 .nav {
     height: 40px;
     width: 100%;

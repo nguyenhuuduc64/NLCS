@@ -14,6 +14,8 @@ function BranchAndBound({ itemsArray }) {
         totalValueBnb,
         setTotalValueBnb,
         branchAndBound,
+        exportArrayResult,
+        setExportArrayResult,
     } = useContext(itemsContext);
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
 
@@ -94,15 +96,16 @@ function BranchAndBound({ itemsArray }) {
         };
 
         Try(0, TLConLai, TGT, bestSolutions);
-    }, [trongluong, branchAndBound]); // useEffect chạy lại khi `trongluong` thay đổi
-
+    }, [trongluong, branchAndBound]);
+    /*************************làm cho export array*/
+    setExportArrayResult(dsdv);
     return (
         <OutputTable
             sapxep={true}
             itemsArray={dsdv}
             PA={true}
             remainingWeight={remainingWeight}
-            currentIndex={parentIndex} // Node con
+            currentIndex={parentIndex}
             totalValue={totalValueBnb}
         />
     );

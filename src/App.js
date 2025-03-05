@@ -19,6 +19,9 @@ function App() {
     const [totalValueBnb, setTotalValueBnb] = useState(0);
     const [itemsArrayHandState, setItemsArrayHandState] = useState(false);
     const [itemsArrayFileState, setItemsArrayFileState] = useState(false);
+    const [compare, setCompare] = useState(false);
+    const [Export, setExport] = useState(false);
+    const [exportArrayResult, setExportArrayResult] = useState([]);
     return (
         <itemsContext.Provider
             value={{
@@ -50,6 +53,12 @@ function App() {
                 setItemsArrayHandState,
                 itemsArrayFileState,
                 setItemsArrayFileState,
+                compare,
+                setCompare,
+                Export,
+                setExport,
+                exportArrayResult,
+                setExportArrayResult,
             }}
         >
             <GlobalStyles>
