@@ -17,15 +17,20 @@ function DynamicProgramming({ itemsArray }) {
     const [dsdv, setDsdv] = useState(() => JSON.parse(JSON.stringify(itemsArray)));
 
     useEffect(() => {
-        // Mỗi khi branchAndBound thay đổi, reset dsdv
         let newArr = JSON.parse(JSON.stringify(itemsArray));
         setPA(newArr);
         setDsdv(newArr);
     }, [dynamicProgramming]);
+
+    const Chon = (k, V) => {
+        if (dsdv[k].SL == null) return Math.floor(V / dsdv[k].TL);
+        else return Math.floor(V / dsdv[k].TL) > dsdv[k].SL ? dsdv[k].SL : Math.floor(V / dsdv[k].TL);
+    };
+
     const TaoBang = (dsdv, n, W, F, X) => {
         // Khởi tạo hàng đầu tiên
         for (let V = 0; V <= W; V++) {
-            X[0][V] = Math.floor(V / dsdv[0].TL); // Sử dụng Math.floor để tránh giá trị thập phân
+            X[0][V] = Chon(0, V); // Sử dụng Math.floor để tránh giá trị thập phân
             F[0][V] = X[0][V] * dsdv[0].GT;
         }
 
@@ -33,14 +38,15 @@ function DynamicProgramming({ itemsArray }) {
         for (let k = 1; k < n; k++) {
             for (let V = 0; V <= W; V++) {
                 let FMax = F[k - 1][V];
+                console.log('cap nhat Fmax');
                 let XMax = 0;
-                let yk = Math.floor(V / dsdv[k].TL);
-
-                for (let xk = 1; xk <= yk; xk++) {
-                    if (V >= xk * dsdv[k].TL) {
-                        const potentialValue = F[k - 1][V - xk * dsdv[k].TL] + xk * dsdv[k].GT;
-                        if (potentialValue > FMax) {
-                            FMax = potentialValue;
+                let yk = Chon(k, V);
+                for (let xk = 0; xk <= yk; xk++) {
+                    let TLConLai = V - xk * dsdv[k].TL;
+                    if (TLConLai >= 0) {
+                        let newValue = F[k - 1][TLConLai] + xk * dsdv[k].GT;
+                        if (newValue > FMax) {
+                            FMax = newValue;
                             XMax = xk;
                         }
                     }
@@ -50,7 +56,7 @@ function DynamicProgramming({ itemsArray }) {
             }
         }
     };
-
+    console.log(X);
     const TraBang = (dsdv, n, W, X) => {
         let V = W;
         for (let k = n - 1; k >= 0; k--) {

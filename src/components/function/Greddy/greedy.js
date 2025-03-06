@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import styles from '../../../pages/Home/home.module.scss';
 import { arrange } from '../arrange/arrange';
 import OutputTable from '../../OutputTable/outputTable';
-import { setPA, setSolutionBeforeSort, setSolutionForItemsArray } from '../utils';
+import { setPA, setSolutionBeforeSort, setSolutionForItemsArray, sortByID } from '../utils';
 const cx = classNames.bind(styles);
 
 function Greedy({ itemsArray }) {
@@ -18,7 +18,7 @@ function Greedy({ itemsArray }) {
         exportArrayResult,
         setExportArrayResult,
     } = useContext(itemsContext);
-    console.log(typeof trongluong);
+    itemsArray = sortByID(itemsArray);
     const [remainingWeight, setRemainingWeight] = useState(parseInt(trongluong));
     const { currentIndex, setCurrentIndex } = useContext(itemsContext);
     const [solution, setSolution] = useState(Array(itemsArray.length).fill(0));
@@ -62,7 +62,7 @@ function Greedy({ itemsArray }) {
                 setRemainingWeight((prevWeight) => prevWeight - dsdv[currentIndex].TL * templePA);
 
                 setCurrentIndex((prev) => prev + 1);
-            }, 500);
+            }, 200);
 
             return () => clearTimeout(id);
         }

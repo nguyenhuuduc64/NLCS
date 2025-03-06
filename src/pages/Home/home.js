@@ -19,6 +19,7 @@ function Home() {
     const [soluong, setSoluong] = useState(0);
     const [arrangeState, setArrangeState] = useState(false);
     const [Alert, setAlert] = useState(false);
+    const [isValidData, setIsValidData] = useState(false);
     const {
         itemsArrayFile,
         setItemsArrayFile,
@@ -44,14 +45,6 @@ function Home() {
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
-    useEffect(() => {
-        if (itemsArrayFile && itemsArrayFile.length > 0) {
-            setIsDataReady(true);
-        }
-        if (itemsArrayHand && itemsArrayHand.length > 0) {
-            setIsDataReady(true);
-        }
-    }, [itemsArrayFile, itemsArrayHand]);
 
     //sau khi cập nhật lại itemsArrayFIle hoặc itemsArrayHand thì useEffect sẽ chạy và set Data về true.
     //ban đầu ở lần render đầu tiên thì useEffect chưa nhận ra sự thay đổi của itemsArrayFile hoặc itemsArrayHand nên chưa chạy code bên trongtrong
@@ -75,17 +68,24 @@ function Home() {
                         itemTemple.TL = parseInt(TL);
                         itemTemple.GT = parseInt(GT);
                         itemTemple.ten = ten;
-                        if (itemTemple.SL) itemTemple.SL = parseInt(SL);
+                        itemTemple.SL = parseInt(SL);
                         itemTemple.id = index;
                         return new Item(itemTemple);
                     });
                 setItemsArrayFile(items);
             };
+            console.log(itemsArrayFile);
             reader.readAsText(file);
         }
     };
 
     const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
+    useEffect(() => {
+        if ((itemsArrayFile && itemsArrayFile.length > 0) || (itemsArrayHand && itemsArrayHand.length > 0)) {
+            setIsDataReady(true);
+        }
+        setIsValidData(exceptionData(itemsArrayFile));
+    }, [itemsArrayFile, itemsArrayHand]);
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -211,7 +211,7 @@ function Home() {
                     <ExportTextFile data={exportArrayResult} />
                 </div>
             </div>
-            {exceptionData(itemsArray) && (
+            {isValidData && (
                 <div className={cx('content')}>
                     <div className={cx('read-table-container')}>
                         {itemsArrayHandState && <InputTable />}

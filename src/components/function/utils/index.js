@@ -2,7 +2,6 @@ export const setPA = (itemsArray) => {
     itemsArray.forEach((item) => {
         item.PA = 0;
     });
-    console.log('da set PA');
 };
 
 export const setSolutionForItemsArray = (itemsArray, PA) => {
@@ -22,7 +21,29 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
     return itemsArray;
 };
 export const exceptionData = (itemsArray = []) => {
-    return !itemsArray.some((item) => isNaN(item.TL) || isNaN(item.GT));
+    const invalidItem = itemsArray.find((item) => isNaN(item.TL) || isNaN(item.GT) || item.GT == 0 || item.TL == 0);
+
+    if (invalidItem) {
+        alert('Thông tin đồ vật không hợp lệ! Vui lòng nhập lại.');
+        return false;
+    }
+
+    return true;
+};
+
+export const errorName = (name) => {
+    name == 'N/A' ?? alert('Lỗi nhập tên đồ vật!!');
+    return name == 'N/A';
+};
+
+export const errorTL = (TL) => {
+    TL == 0 ?? alert('Trọng lượng không được bằng 0');
+    return TL == 0;
+};
+
+export const errorGT = (GT) => {
+    GT == 0 ?? alert('Giá trị không được bằng 0');
+    return GT == 0;
 };
 
 export const sortByID = (itemsArray) => {

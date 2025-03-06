@@ -16,40 +16,31 @@ function BranchAndBound({ itemsArray }) {
     let GiaLNTT = 0.0;
     const [dsdv, setDsdv] = useState(JSON.parse(JSON.stringify(itemsArray)));
 
-    useEffect(() => {
-        console.log(dsdv); // Ghi log mỗi khi dsdv thay đổi
-    }, [dsdv]); // useEffect này chỉ được gọi khi dsdv thay đổi
-
-    const Chon = (TLConLai, TLVat) => (TLVat === 0 ? 0 : Math.floor(TLConLai / TLVat));
+    const Chon = (TLConLai, TLVat) => Math.floor(TLConLai / TLVat);
 
     const GhiNhanKiLuc = (newBestSolutions, newTGT) => {
+        console.log(newBestSolutions);
         if (GiaLNTT < newTGT) {
             GiaLNTT = newTGT;
             const updatedDsdv = JSON.parse(JSON.stringify(dsdv));
             newBestSolutions.forEach((item, index) => {
                 updatedDsdv[index].PA = item;
             });
-            console.log('new', updatedDsdv);
             setDsdv(updatedDsdv);
             let templeTLConLai = trongluong - updatedDsdv.reduce((sum, item) => sum + item.PA * item.TL, 0);
             let templeTGT = updatedDsdv.reduce((sum, item) => sum + item.PA * item.GT, 0);
             setRemainingWeight(templeTLConLai);
             setTotalValueBnb(templeTGT);
-            console.log('da ghi nhan ky luc');
         }
     };
 
     const upperBound = (i, TGT, TLConLai) => {
-        let bound = TGT;
-        for (let k = i; k < n; k++) {
-            if (dsdv[k].TL <= TLConLai) {
-                bound += dsdv[k].GT; // Chọn toàn bộ nếu còn đủ trọng lượng
-                TLConLai -= dsdv[k].TL;
-            } else {
-                bound += TLConLai * dsdv[k].DG; // Chia nhỏ vật phẩm cuối
-                break;
-            }
+        // Kiểm tra xem đối tượng dsdv[i + 1] có thuộc tính DG hay không
+        if (!dsdv[i + 1] || typeof dsdv[i + 1].DG === 'undefined') {
+            // Trả về giá trị mặc định nếu DG không tồn tại
+            return TGT;
         }
+        let bound = TGT + TLConLai * dsdv[i + 1].DG;
         return bound;
     };
 
@@ -58,30 +49,26 @@ function BranchAndBound({ itemsArray }) {
         let TGT = 0.0;
 
         const Try = (i, TLConLai, TGT, bestSolutions) => {
-            if (i >= n) return;
+            if (i >= n || TLConLai < 0) return;
 
-            setTimeout(() => {
-                setParentIndex(i);
-            }, 100);
             let templeChon;
 
             if (dsdv[i].SL) templeChon = Math.min(Chon(TLConLai, dsdv[i].TL), dsdv[i].SL);
             else templeChon = Chon(TLConLai, dsdv[i].TL);
-
+            console.log('templeChon', templeChon);
             for (let j = templeChon; j >= 0; j--) {
+                console.log('j', j);
                 let newTGT = TGT + j * dsdv[i].GT;
                 let newTLConLai = TLConLai - j * dsdv[i].TL;
                 let newBestSolutions = [...bestSolutions];
                 newBestSolutions[i] = j;
                 let CT = upperBound(i, newTGT, newTLConLai);
-
+                console.log('i', i, 'CT', CT, 'GTLNTT', GiaLNTT);
                 if (CT > GiaLNTT) {
                     if (i === n - 1 || newTLConLai === 0) {
                         GhiNhanKiLuc(newBestSolutions, newTGT);
                     } else {
-                        setTimeout(() => {
-                            Try(i + 1, newTLConLai, newTGT, newBestSolutions);
-                        }, 500); // Delay giúp UI dễ thấy hơn
+                        Try(i + 1, newTLConLai, newTGT, newBestSolutions);
                     }
                 }
             }
