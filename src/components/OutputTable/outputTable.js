@@ -6,7 +6,7 @@ import { arrange } from '../function/arrange/arrange';
 
 const cx = classNames.bind(styles);
 
-function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, totalValue }) {
+function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, totalValue, name }) {
     if (itemsArray) {
         /*tạo đơn giá cho các đò vật */
         for (let i = 0; i < itemsArray.length; i++) {
@@ -23,6 +23,7 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
 
     return (
         <div>
+            <h2>{name}</h2>
             <p>Trọng lượng còn lại: {remainingWeight}</p>
             {itemsArray && (
                 <table className={cx('table', 'output-table')}>

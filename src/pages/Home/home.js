@@ -7,19 +7,20 @@ import OutputTable from '../../components/OutputTable/outputTable';
 import { itemsContext } from '../../App';
 import Greedy from '../../components/function/Greddy/greedy';
 import BranchAndBound from '../../components/function/BranchAndBound/branchandbounce';
-import { setPA } from '../../components/function/utils';
 import DynamicProgramming from '../../components/function/DynamicProgramming/DynamicProgramming';
 import Compare from '../../components/Compare/compare';
 import { arrange } from '../../components/function/arrange/arrange';
 import ExportTextFile from '../../components/ExportTextFile/exportTextFile';
+import { exceptionData } from '../../components/function/exceptionData/exceptionData';
+
 const cx = classNames.bind(styles);
 
 function Home() {
     const [file, setFile] = useState(null);
     const [soluong, setSoluong] = useState(0);
     const [arrangeState, setArrangeState] = useState(false);
+    const [Alert, setAlert] = useState(false);
     const {
-        setCurrentIndex,
         itemsArrayFile,
         setItemsArrayFile,
         itemsArrayHand,
@@ -33,22 +34,14 @@ function Home() {
         dynamicProgramming,
         setDynamicProgramming,
         inputState,
-        setInputState,
-        setTotalValueGreedy,
         setTotalValueBnb,
-        totalValueGreedy,
-        totalValueBnb,
         itemsArrayHandState,
         setItemsArrayHandState,
-        itemsArrayFileState,
 
         setItemsArrayFileState,
         compare,
         setCompare,
-        Export,
-        setExport,
         exportArrayResult,
-        setExportArrayResult,
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
@@ -60,6 +53,7 @@ function Home() {
             setIsDataReady(true);
         }
     }, [itemsArrayFile, itemsArrayHand]);
+
     //sau khi cập nhật lại itemsArrayFIle hoặc itemsArrayHand thì useEffect sẽ chạy và set Data về true.
     //ban đầu ở lần render đầu tiên thì useEffect chưa nhận ra sự thay đổi của itemsArrayFile hoặc itemsArrayHand nên chưa chạy code bên trongtrong
     const handleFileChange = (e) => {
@@ -203,44 +197,46 @@ function Home() {
                     <ExportTextFile data={exportArrayResult} />
                 </div>
             </div>
-            <div className={cx('content')}>
-                <div className={cx('read-table-container')}>
-                    {itemsArrayHandState && <InputTable />}
-                    {itemsArrayFile.length !== 0 && (
-                        <div>
-                            <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
-                            <OutputTable
-                                sapxep={false}
-                                PA={false}
-                                itemsArray={itemsArrayFile}
-                                remainingWeight={trongluong}
-                            />
-                        </div>
-                    )}
-
-                    <div>
-                        {arrangeState && itemsArray && (
-                            <>
-                                <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
+            {exceptionData(itemsArray) && (
+                <div className={cx('content')}>
+                    <div className={cx('read-table-container')}>
+                        {itemsArrayHandState && <InputTable />}
+                        {itemsArrayFile.length !== 0 && (
+                            <div>
+                                <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
                                 <OutputTable
-                                    sapxep={true}
+                                    sapxep={false}
                                     PA={false}
-                                    itemsArray={itemsArray}
+                                    itemsArray={itemsArrayFile}
                                     remainingWeight={trongluong}
                                 />
-                            </>
+                            </div>
                         )}
-                    </div>
 
-                    <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
+                        <div>
+                            {arrangeState && itemsArray && (
+                                <>
+                                    <h2>MẢNG ĐỒ VẬT ĐƯỢC SẮP XẾP THEO ĐƠN GIÁ</h2>
+                                    <OutputTable
+                                        sapxep={true}
+                                        PA={false}
+                                        itemsArray={itemsArray}
+                                        remainingWeight={trongluong}
+                                    />
+                                </>
+                            )}
+                        </div>
+
+                        <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
+                    </div>
+                    <div className={cx('output-table-container')}>
+                        <div>{greedy && <Greedy itemsArray={itemsArray} />}</div>
+                        <div>{branhAndBound && <BranchAndBound itemsArray={itemsArray} />}</div>
+                        <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArray} />}</div>
+                    </div>
                 </div>
-                <div className={cx('output-table-container')}>
-                    {(greedy || branhAndBound || dynamicProgramming) && <h2>MẢNG ĐỒ VẬT PHƯƠNG ÁN</h2>}
-                    <div>{greedy && <Greedy itemsArray={itemsArray} />}</div>
-                    <div>{branhAndBound && <BranchAndBound itemsArray={itemsArray} />}</div>
-                    <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArray} />}</div>
-                </div>
-            </div>
+            )}
+            {!exceptionData(itemsArray) && alert('Nhap lai')}
             <div>{compare && <Compare itemsArray={itemsArrayFile} />}</div>
         </div>
     );

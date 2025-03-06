@@ -5,45 +5,37 @@ import { arrange } from '../arrange/arrange';
 import { setPA } from '../utils';
 
 function BranchAndBound({ itemsArray }) {
-    const {
-        trongluong,
-        setParentIndex,
-        setBnbCurrentIndex,
-        bnbCurrentIndex,
-        parentIndex,
-        totalValueBnb,
-        setTotalValueBnb,
-        branchAndBound,
-        exportArrayResult,
-        setExportArrayResult,
-    } = useContext(itemsContext);
-    const [remainingWeight, setRemainingWeight] = useState(trongluong);
+    const { trongluong, setParentIndex, totalValueBnb, setTotalValueBnb, branchAndBound, setExportArrayResult } =
+        useContext(itemsContext);
 
+    const [remainingWeight, setRemainingWeight] = useState(trongluong);
     // Sắp xếp danh sách vật phẩm
     itemsArray = arrange(itemsArray);
     const n = itemsArray.length;
     let bestSolutions = Array(n).fill(0);
     let GiaLNTT = 0.0;
-    const [dsdv, setDsdv] = useState(() => JSON.parse(JSON.stringify(itemsArray)));
+    const [dsdv, setDsdv] = useState(JSON.parse(JSON.stringify(itemsArray)));
 
     useEffect(() => {
-        // Mỗi khi branchAndBound thay đổi, reset dsdv
-        let newArr = JSON.parse(JSON.stringify(itemsArray));
-        setPA(newArr);
-        setDsdv(newArr);
-    }, [branchAndBound]);
+        console.log(dsdv); // Ghi log mỗi khi dsdv thay đổi
+    }, [dsdv]); // useEffect này chỉ được gọi khi dsdv thay đổi
 
     const Chon = (TLConLai, TLVat) => (TLVat === 0 ? 0 : Math.floor(TLConLai / TLVat));
 
     const GhiNhanKiLuc = (newBestSolutions, newTGT) => {
         if (GiaLNTT < newTGT) {
             GiaLNTT = newTGT;
-            const updatedDsdv = dsdv.map((item, i) => ({ ...item, PA: newBestSolutions[i] }));
+            const updatedDsdv = JSON.parse(JSON.stringify(dsdv));
+            newBestSolutions.forEach((item, index) => {
+                updatedDsdv[index].PA = item;
+            });
+            console.log('new', updatedDsdv);
             setDsdv(updatedDsdv);
             let templeTLConLai = trongluong - updatedDsdv.reduce((sum, item) => sum + item.PA * item.TL, 0);
             let templeTGT = updatedDsdv.reduce((sum, item) => sum + item.PA * item.GT, 0);
             setRemainingWeight(templeTLConLai);
             setTotalValueBnb(templeTGT);
+            console.log('da ghi nhan ky luc');
         }
     };
 
@@ -105,8 +97,8 @@ function BranchAndBound({ itemsArray }) {
             itemsArray={dsdv}
             PA={true}
             remainingWeight={remainingWeight}
-            currentIndex={parentIndex}
             totalValue={totalValueBnb}
+            name="Thuật toán Nhánh cận"
         />
     );
 }

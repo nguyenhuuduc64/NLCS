@@ -77,6 +77,7 @@ function Greedy({ itemsArray }) {
             currentIndex={currentIndex}
             remainingWeight={remainingWeight}
             totalValue={totalValueGreedy}
+            name="Thuật toán Tham lam"
         />
     );
 }

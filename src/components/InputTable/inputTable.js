@@ -12,7 +12,7 @@ function InputTable() {
         itemsArrayFile,
         setItemsArrayFile,
         itemsArrayHandState,
-        trongLuong,
+        trongluong,
         setTrongluong,
     } = useContext(itemsContext);
     const [submit, setSubmit] = useState(false);
@@ -65,7 +65,6 @@ function InputTable() {
             </tr>,
         );
     }
-    console.log(itemsArrayHand);
     const sortItems = arrange(itemsArrayHand);
     return (
         <div style={styles}>
@@ -102,9 +101,9 @@ function InputTable() {
             <div>
                 {submit && (
                     <div>
-                        <p>Trọng lượng: {trongLuong}</p>
+                        <p>Trọng lượng: {trongluong}</p>
                         <h1>Mảng đồ vật được nhập từ bàn phím</h1>
-                        <OutputTable sapxep={false} itemsArray={itemsArrayHand} remainingWeight={trongLuong} />
+                        <OutputTable sapxep={false} itemsArray={itemsArrayHand} remainingWeight={trongluong} />
                     </div>
                 )}
             </div>

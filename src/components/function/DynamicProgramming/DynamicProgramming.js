@@ -53,7 +53,6 @@ function DynamicProgramming({ itemsArray }) {
 
     const TraBang = (dsdv, n, W, X) => {
         let V = W;
-        console.log(typeof W);
         for (let k = n - 1; k >= 0; k--) {
             dsdv[k].PA = X[k][V];
             V -= X[k][V] * dsdv[k].TL;
@@ -61,8 +60,6 @@ function DynamicProgramming({ itemsArray }) {
     };
     TaoBang(dsdv, n, W, F, X);
     TraBang(dsdv, n, W, X);
-    console.log('X', X);
-    console.log('F', F);
     const totalValue = F[n - 1][W];
     const remainingWeight = W - dsdv.reduce((acc, item) => acc + item.PA * item.TL, 0);
     /**********************làm cho export arrayarray */
@@ -75,6 +72,7 @@ function DynamicProgramming({ itemsArray }) {
                 sapxep={true}
                 totalValue={totalValue}
                 remainingWeight={remainingWeight}
+                name="Thuật toán Quy hoạch động"
             />
         </div>
     );
