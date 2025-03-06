@@ -3,6 +3,7 @@ import styles from '../../pages/Home/home.module.scss';
 import classNames from 'classnames/bind';
 import { itemsContext } from '../../App';
 import { arrange } from '../function/arrange/arrange';
+import { sortByID } from '../function/utils';
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,7 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
 
     // Check if any item has a valid SL value
     const hasValidSL = itemsArray.some((item) => item.SL !== null && !isNaN(item.SL));
-
+    if (PA) itemsArray = sortByID(itemsArray);
     return (
         <div>
             <h2>{name}</h2>

@@ -21,3 +21,21 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
     });
     return itemsArray;
 };
+export const exceptionData = (itemsArray = []) => {
+    return !itemsArray.some((item) => isNaN(item.TL) || isNaN(item.GT));
+};
+
+export const sortByID = (itemsArray) => {
+    let n = itemsArray.length;
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (itemsArray[j].id > itemsArray[j + 1].id) {
+                // Swap itemsArray[j] and itemsArray[j + 1]
+                let temp = itemsArray[j];
+                itemsArray[j] = itemsArray[j + 1];
+                itemsArray[j + 1] = temp;
+            }
+        }
+    }
+    return itemsArray;
+};

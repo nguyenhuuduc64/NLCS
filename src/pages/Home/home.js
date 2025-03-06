@@ -11,8 +11,7 @@ import DynamicProgramming from '../../components/function/DynamicProgramming/Dyn
 import Compare from '../../components/Compare/compare';
 import { arrange } from '../../components/function/arrange/arrange';
 import ExportTextFile from '../../components/ExportTextFile/exportTextFile';
-import { exceptionData } from '../../components/function/exceptionData/exceptionData';
-
+import { exceptionData } from '../../components/function/utils';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -100,6 +99,10 @@ function Home() {
                             setItemsArrayHandState(false);
                             setItemsArrayHand([]);
                             handleFileChange(e);
+                            setGreedy(false);
+                            setBranhAndBound(false);
+                            setDynamicProgramming(false);
+                            setCompare(false);
                         }}
                     />
                     <label htmlFor="input-file" className={cx('input-file')}>
@@ -117,6 +120,10 @@ function Home() {
                             });
                             setItemsArrayFileState(false);
                             setItemsArrayFile([]);
+                            setGreedy(false);
+                            setBranhAndBound(false);
+                            setCompare(false);
+                            setDynamicProgramming(false);
                         }}
                     />
                     <label htmlFor="input-btn" className={cx('input-btn')}>
@@ -130,8 +137,7 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setArrangeState((prev) => !prev);
-                            arrange(itemsArrayFile);
-                            arrange(itemsArrayHand);
+                            arrange(itemsArray);
                         }}
                     />
                     <label htmlFor="arrange" className={cx('input-btn')}>
@@ -147,6 +153,9 @@ function Home() {
                             setGreedy((prev) => {
                                 return !prev;
                             });
+
+                            setBranhAndBound(false);
+                            setDynamicProgramming(false);
                         }}
                     />
                     <label htmlFor="greedy-btn" className={cx('input-btn')}>
@@ -162,6 +171,9 @@ function Home() {
                             setTotalValueBnb(0);
 
                             setBranhAndBound((prev) => !prev);
+                            setGreedy(false);
+
+                            setDynamicProgramming(false);
                         }}
                     />
                     <label htmlFor="bnb-btn" className={cx('input-btn')}>
@@ -175,6 +187,8 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setDynamicProgramming((prev) => !prev);
+                            setGreedy(false);
+                            setBranhAndBound(false);
                         }}
                     />
                     <label htmlFor="dynamicpg-btn" className={cx('input-btn')}>
@@ -236,8 +250,7 @@ function Home() {
                     </div>
                 </div>
             )}
-            {!exceptionData(itemsArray) && alert('Nhap lai')}
-            <div>{compare && <Compare itemsArray={itemsArrayFile} />}</div>
+            <div>{compare && <Compare itemsArray={itemsArray} />}</div>
         </div>
     );
 }

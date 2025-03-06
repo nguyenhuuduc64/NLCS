@@ -74,7 +74,6 @@ function Greedy({ itemsArray }) {
             sapxep={true}
             itemsArray={dsdv}
             PA={true}
-            currentIndex={currentIndex}
             remainingWeight={remainingWeight}
             totalValue={totalValueGreedy}
             name="Thuật toán Tham lam"
