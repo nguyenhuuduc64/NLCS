@@ -10,15 +10,8 @@ import { errorName, exceptionData } from '../function/utils';
 const cx = classNames.bind(styles);
 function InputTable() {
     const [rowCount, setRowCount] = useState(0);
-    const {
-        itemsArrayHand,
-        setItemsArrayHand,
-        itemsArrayFile,
-        setItemsArrayFile,
-        itemsArrayHandState,
-        trongluong,
-        setTrongluong,
-    } = useContext(itemsContext);
+    const { itemsArrayHand, setItemsArrayHand, itemsArrayHandState, trongluong, setTrongluong } =
+        useContext(itemsContext);
     const [submit, setSubmit] = useState(false);
     const inputRef = useRef();
     const handleInputChange = () => {
@@ -29,6 +22,13 @@ function InputTable() {
             setItemsArrayHand(newItemsArray);
         }
     };
+
+    const handleDeleteRow = (index) => {
+        const newItemsArrayHand = itemsArrayHand.filter((_, i) => i !== index);
+        setItemsArrayHand(newItemsArrayHand);
+        setRowCount(newItemsArrayHand.length); // Cập nhật số dòng
+    };
+
     useEffect(() => {
         setTrongluong(0);
     }, []);
@@ -44,7 +44,6 @@ function InputTable() {
                         onChange={(e) => {
                             const newItemsArrayHand = [...itemsArrayHand];
                             newItemsArrayHand[r] = { ...newItemsArrayHand[r], ten: e.target.value, id: r };
-                            console.log(itemsArrayHand);
                             setItemsArrayHand(newItemsArrayHand);
                         }}
                     />
@@ -82,6 +81,9 @@ function InputTable() {
                         }}
                     />
                 </td>
+                <td>
+                    <button onClick={() => handleDeleteRow(r)}>Xóa</button>
+                </td>
             </tr>,
         );
     }
@@ -94,6 +96,7 @@ function InputTable() {
                         <input
                             type="number"
                             placeholder="Nhập số lượng đồ vật"
+                            value={rowCount}
                             ref={inputRef}
                             onChange={handleInputChange}
                         />

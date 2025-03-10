@@ -7,8 +7,17 @@ import { setPA } from '../utils';
 
 const cx = classNames.bind(styles);
 
-function DynamicProgramming({ itemsArray }) {
-    const { trongluong, dynamicProgramming, exportArrayResult, setExportArrayResult } = useContext(itemsContext);
+function DynamicProgramming({ itemsArray, display }) {
+    const {
+        trongluong,
+        dynamicProgramming,
+        exportArrayResult,
+        setExportArrayResult,
+        setPADynamicProgramming,
+        PADynamicProgramming,
+        setTotalValueDynamicProgramming,
+        setRemainingWeightDynamicProgramming,
+    } = useContext(itemsContext);
     const n = itemsArray.length; // Kích thước của mảng items
     const W = parseInt(trongluong); // Trọng lượng tối đa
     // Khởi tạo bảng F và X
@@ -28,17 +37,14 @@ function DynamicProgramming({ itemsArray }) {
     };
 
     const TaoBang = (dsdv, n, W, F, X) => {
-        // Khởi tạo hàng đầu tiên
         for (let V = 0; V <= W; V++) {
-            X[0][V] = Chon(0, V); // Sử dụng Math.floor để tránh giá trị thập phân
+            X[0][V] = Chon(0, V);
             F[0][V] = X[0][V] * dsdv[0].GT;
         }
 
-        // Điền bảng động
         for (let k = 1; k < n; k++) {
             for (let V = 0; V <= W; V++) {
                 let FMax = F[k - 1][V];
-                console.log('cap nhat Fmax');
                 let XMax = 0;
                 let yk = Chon(k, V);
                 for (let xk = 0; xk <= yk; xk++) {
@@ -56,7 +62,6 @@ function DynamicProgramming({ itemsArray }) {
             }
         }
     };
-    console.log(X);
     const TraBang = (dsdv, n, W, X) => {
         let V = W;
         for (let k = n - 1; k >= 0; k--) {
@@ -70,8 +75,15 @@ function DynamicProgramming({ itemsArray }) {
     const remainingWeight = W - dsdv.reduce((acc, item) => acc + item.PA * item.TL, 0);
     /**********************làm cho export arrayarray */
     setExportArrayResult(dsdv);
+    /*****************Đưa phương án của greedy ra ngoài */
+    useEffect(() => {
+        let PATemple = dsdv.map((dv) => dv.PA);
+        setPADynamicProgramming(PATemple);
+        setRemainingWeightDynamicProgramming(remainingWeight);
+        setTotalValueDynamicProgramming(totalValue);
+    }, [dsdv]);
     return (
-        <div className={cx('')}>
+        display && (
             <OutputTable
                 itemsArray={dsdv}
                 PA={true}
@@ -79,8 +91,9 @@ function DynamicProgramming({ itemsArray }) {
                 totalValue={totalValue}
                 remainingWeight={remainingWeight}
                 name="Thuật toán Quy hoạch động"
+                type="DYNAMIC_PROGRAMMING"
             />
-        </div>
+        )
     );
 }
 

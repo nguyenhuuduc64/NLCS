@@ -7,18 +7,19 @@ import OutputTable from '../../OutputTable/outputTable';
 import { setPA, setSolutionBeforeSort, setSolutionForItemsArray, sortByID } from '../utils';
 const cx = classNames.bind(styles);
 
-function Greedy({ itemsArray }) {
+function Greedy({ itemsArray, display }) {
     const {
         trongluong,
-        inputState,
-        setInputState,
         greedy,
         totalValueGreedy,
         setTotalValueGreedy,
-        exportArrayResult,
         setExportArrayResult,
+        compare,
+        setCompare,
+        PAGreedy,
+        setPAGreedy,
+        setRemainingWeightGreedy,
     } = useContext(itemsContext);
-    itemsArray = sortByID(itemsArray);
     const [remainingWeight, setRemainingWeight] = useState(parseInt(trongluong));
     const { currentIndex, setCurrentIndex } = useContext(itemsContext);
     const [solution, setSolution] = useState(Array(itemsArray.length).fill(0));
@@ -27,7 +28,6 @@ function Greedy({ itemsArray }) {
     const [dsdv, setDsdv] = useState(() => JSON.parse(JSON.stringify(sortedItems)));
 
     useEffect(() => {
-        // Mỗi khi branchAndBound thay đổi, reset dsdv
         let newArr = JSON.parse(JSON.stringify(sortedItems));
         setCurrentIndex(0);
         setTotalValueGreedy(0);
@@ -69,15 +69,24 @@ function Greedy({ itemsArray }) {
     }, [currentIndex]);
     /*****************************lam cho export array */
     setExportArrayResult(dsdv);
+    /*****************Đưa phương án của greedy ra ngoài */
+    useEffect(() => {
+        let PATemple = dsdv.map((dv) => dv.PA);
+        setPAGreedy(PATemple);
+        setRemainingWeightGreedy(remainingWeight);
+    }, [dsdv]);
+
     return (
-        <OutputTable
-            sapxep={true}
-            itemsArray={dsdv}
-            PA={true}
-            remainingWeight={remainingWeight}
-            totalValue={totalValueGreedy}
-            name="Thuật toán Tham lam"
-        />
+        display && (
+            <OutputTable
+                sapxep={true}
+                itemsArray={dsdv}
+                PA={true}
+                remainingWeight={remainingWeight}
+                totalValue={totalValueGreedy}
+                name="Thuật toán Tham lam"
+            />
+        )
     );
 }
 

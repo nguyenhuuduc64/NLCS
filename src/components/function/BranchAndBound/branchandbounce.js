@@ -4,9 +4,18 @@ import OutputTable from '../../OutputTable/outputTable';
 import { arrange } from '../arrange/arrange';
 import { setPA } from '../utils';
 
-function BranchAndBound({ itemsArray }) {
-    const { trongluong, setParentIndex, totalValueBnb, setTotalValueBnb, branchAndBound, setExportArrayResult } =
-        useContext(itemsContext);
+function BranchAndBound({ itemsArray, display }) {
+    const {
+        trongluong,
+        setParentIndex,
+        totalValueBnb,
+        setTotalValueBnb,
+        branchAndBound,
+        setExportArrayResult,
+        setPABranchAndBound,
+        PABranchAndBound,
+        setRemainingWeightBranchAndBound,
+    } = useContext(itemsContext);
 
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
     // Sắp xếp danh sách vật phẩm
@@ -19,7 +28,6 @@ function BranchAndBound({ itemsArray }) {
     const Chon = (TLConLai, TLVat) => Math.floor(TLConLai / TLVat);
 
     const GhiNhanKiLuc = (newBestSolutions, newTGT) => {
-        console.log(newBestSolutions);
         if (GiaLNTT < newTGT) {
             GiaLNTT = newTGT;
             const updatedDsdv = JSON.parse(JSON.stringify(dsdv));
@@ -35,9 +43,7 @@ function BranchAndBound({ itemsArray }) {
     };
 
     const upperBound = (i, TGT, TLConLai) => {
-        // Kiểm tra xem đối tượng dsdv[i + 1] có thuộc tính DG hay không
         if (!dsdv[i + 1] || typeof dsdv[i + 1].DG === 'undefined') {
-            // Trả về giá trị mặc định nếu DG không tồn tại
             return TGT;
         }
         let bound = TGT + TLConLai * dsdv[i + 1].DG;
@@ -55,15 +61,12 @@ function BranchAndBound({ itemsArray }) {
 
             if (dsdv[i].SL) templeChon = Math.min(Chon(TLConLai, dsdv[i].TL), dsdv[i].SL);
             else templeChon = Chon(TLConLai, dsdv[i].TL);
-            console.log('templeChon', templeChon);
             for (let j = templeChon; j >= 0; j--) {
-                console.log('j', j);
                 let newTGT = TGT + j * dsdv[i].GT;
                 let newTLConLai = TLConLai - j * dsdv[i].TL;
                 let newBestSolutions = [...bestSolutions];
                 newBestSolutions[i] = j;
                 let CT = upperBound(i, newTGT, newTLConLai);
-                console.log('i', i, 'CT', CT, 'GTLNTT', GiaLNTT);
                 if (CT > GiaLNTT) {
                     if (i === n - 1 || newTLConLai === 0) {
                         GhiNhanKiLuc(newBestSolutions, newTGT);
@@ -78,15 +81,24 @@ function BranchAndBound({ itemsArray }) {
     }, [trongluong, branchAndBound]);
     /*************************làm cho export array*/
     setExportArrayResult(dsdv);
+    /*****************Đưa phương án của greedy ra ngoài */
+    useEffect(() => {
+        let PATemple = dsdv.map((dv) => dv.PA);
+        setPABranchAndBound(PATemple);
+        setRemainingWeightBranchAndBound(remainingWeight);
+    }, [dsdv]);
     return (
-        <OutputTable
-            sapxep={true}
-            itemsArray={dsdv}
-            PA={true}
-            remainingWeight={remainingWeight}
-            totalValue={totalValueBnb}
-            name="Thuật toán Nhánh cận"
-        />
+        display && (
+            <OutputTable
+                sapxep={true}
+                itemsArray={dsdv}
+                PA={true}
+                remainingWeight={remainingWeight}
+                totalValue={totalValueBnb}
+                name="Thuật toán Nhánh cận"
+                type="BRANCH_AND_BOUND"
+            />
+        )
     );
 }
 

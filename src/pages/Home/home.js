@@ -74,7 +74,6 @@ function Home() {
                     });
                 setItemsArrayFile(items);
             };
-            console.log(itemsArrayFile);
             reader.readAsText(file);
         }
     };
@@ -244,13 +243,13 @@ function Home() {
                         <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                     </div>
                     <div className={cx('output-table-container')}>
-                        <div>{greedy && <Greedy itemsArray={itemsArray} />}</div>
-                        <div>{branhAndBound && <BranchAndBound itemsArray={itemsArray} />}</div>
-                        <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArray} />}</div>
+                        <div>{greedy && <Greedy itemsArray={itemsArray} display={true} />}</div>
+                        <div>{branhAndBound && <BranchAndBound itemsArray={itemsArray} display={true} />}</div>
+                        <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArray} display={true} />}</div>
+                        <div>{compare && <Compare itemsArray={itemsArray} />}</div>
                     </div>
                 </div>
             )}
-            <div>{compare && <Compare itemsArray={itemsArray} />}</div>
         </div>
     );
 }

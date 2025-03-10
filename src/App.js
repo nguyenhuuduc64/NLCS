@@ -17,11 +17,19 @@ function App() {
     const [bnbCurrentIndex, setBnbCurrentIndex] = useState(0);
     const [totalValueGreedy, setTotalValueGreedy] = useState(0);
     const [totalValueBnb, setTotalValueBnb] = useState(0);
+    const [totalValueDynamicProgramming, setTotalValueDynamicProgramming] = useState(0);
     const [itemsArrayHandState, setItemsArrayHandState] = useState(false);
     const [itemsArrayFileState, setItemsArrayFileState] = useState(false);
     const [compare, setCompare] = useState(false);
     const [Export, setExport] = useState(false);
     const [exportArrayResult, setExportArrayResult] = useState([]);
+    const [PAGreedy, setPAGreedy] = useState([]);
+    const [PABranchAndBound, setPABranchAndBound] = useState([]);
+    const [PADynamicProgramming, setPADynamicProgramming] = useState([]);
+    const [remainingWeightGreedy, setRemainingWeightGreedy] = useState(0);
+    const [remainingWeightBranchAndBound, setRemainingWeightBranchAndBound] = useState(0);
+    const [remainingWeightDynamicProgramming, setRemainingWeightDynamicProgramming] = useState(0);
+
     return (
         <itemsContext.Provider
             value={{
@@ -59,6 +67,20 @@ function App() {
                 setExport,
                 exportArrayResult,
                 setExportArrayResult,
+                PAGreedy,
+                setPAGreedy,
+                PABranchAndBound,
+                setPABranchAndBound,
+                PADynamicProgramming,
+                setPADynamicProgramming,
+                remainingWeightGreedy,
+                setRemainingWeightGreedy,
+                remainingWeightBranchAndBound,
+                setRemainingWeightBranchAndBound,
+                remainingWeightDynamicProgramming,
+                setRemainingWeightDynamicProgramming,
+                totalValueDynamicProgramming,
+                setTotalValueDynamicProgramming,
             }}
         >
             <GlobalStyles>

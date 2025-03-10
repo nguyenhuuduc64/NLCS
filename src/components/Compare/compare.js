@@ -5,10 +5,11 @@ import BranchAndBound from '../function/BranchAndBound/branchandbounce';
 import DynamicProgramming from '../function/DynamicProgramming/DynamicProgramming';
 import { useContext, useEffect } from 'react';
 import { itemsContext } from '../../App';
+import OutputTable from '../OutputTable/outputTable';
 
 const cx = classNames.bind(styles);
 function Compare({ itemsArray }) {
-    const { compare, setCompare } = useContext(itemsContext);
+    const { compare, setCompare, PAGreedy, PABranchAndBound, PADynamicProgramming } = useContext(itemsContext);
     /*nhấn esc để tắt hiển thị bảng so sánh */
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -24,15 +25,10 @@ function Compare({ itemsArray }) {
 
     return (
         <div className={cx('compare-wrapper')} style={{ display: 'flex' }}>
-            <div style={{ width: 'calc(100% / 3)' }}>
-                <Greedy itemsArray={itemsArray} />
-            </div>
-            <div style={{ width: 'calc(100% / 3)' }}>
-                <BranchAndBound itemsArray={itemsArray} />
-            </div>
-            <div style={{ width: 'calc(100% / 3)' }}>
-                <DynamicProgramming itemsArray={itemsArray} />
-            </div>
+            <Greedy itemsArray={itemsArray} display={false} />
+            <BranchAndBound itemsArray={itemsArray} display={false} />
+            <DynamicProgramming itemsArray={itemsArray} display={false} />
+            <OutputTable itemsArray={itemsArray} compare={true} />
         </div>
     );
 }
