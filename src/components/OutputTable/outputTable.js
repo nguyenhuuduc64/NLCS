@@ -9,9 +9,6 @@ const cx = classNames.bind(styles);
 
 function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, totalValue, name, type, compare }) {
     const {
-        setPAGreedy,
-        setPADynamicProgramming,
-        setPABranchAndBound,
         PAGreedy,
         PABranchAndBound,
         PADynamicProgramming,
@@ -21,6 +18,9 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
         remainingWeightGreedy,
         remainingWeightBranchAndBound,
         remainingWeightDynamicProgramming,
+        executionTimeDynamicProgramming,
+        executionTimeBranchAndBound,
+        executionTimeGreedy,
     } = useContext(itemsContext);
     if (itemsArray) {
         /*tạo đơn giá cho các đò vật */
@@ -124,6 +124,15 @@ function OutputTable({ sapxep, PA, itemsArray, currentIndex, remainingWeight, to
                             <td style={{ fontWeight: 'bolder' }}>{remainingWeightGreedy}</td>
                             <td style={{ fontWeight: 'bolder' }}>{remainingWeightBranchAndBound}</td>
                             <td style={{ fontWeight: 'bolder' }}>{remainingWeightDynamicProgramming}</td>
+                        </tr>
+                        <tr style={{ backgroundColor: '#7bbfff' }}>
+                            <td>Thời gian thực thi</td>
+                            <td></td>
+                            <td></td>
+                            {hasValidSL && <td></td>}
+                            <td style={{ fontWeight: 'bolder' }}>{executionTimeGreedy}</td>
+                            <td style={{ fontWeight: 'bolder' }}>{executionTimeBranchAndBound}</td>
+                            <td style={{ fontWeight: 'bolder' }}>{executionTimeDynamicProgramming}</td>
                         </tr>
                     </tbody>
                 </table>

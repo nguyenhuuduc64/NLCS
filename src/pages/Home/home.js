@@ -155,6 +155,7 @@ function Home() {
 
                             setBranhAndBound(false);
                             setDynamicProgramming(false);
+                            setCompare(false);
                         }}
                     />
                     <label htmlFor="greedy-btn" className={cx('input-btn')}>
@@ -171,7 +172,7 @@ function Home() {
 
                             setBranhAndBound((prev) => !prev);
                             setGreedy(false);
-
+                            setCompare(false);
                             setDynamicProgramming(false);
                         }}
                     />
@@ -188,6 +189,7 @@ function Home() {
                             setDynamicProgramming((prev) => !prev);
                             setGreedy(false);
                             setBranhAndBound(false);
+                            setCompare(false);
                         }}
                     />
                     <label htmlFor="dynamicpg-btn" className={cx('input-btn')}>
@@ -200,6 +202,9 @@ function Home() {
                         style={{ display: 'none' }}
                         onClick={() => {
                             setCompare((prev) => !prev);
+                            setGreedy(false);
+                            setDynamicProgramming(false);
+                            setBranhAndBound(false);
                         }}
                     />
                     <label htmlFor="compare-btn" className={cx('input-file')}>
@@ -243,7 +248,7 @@ function Home() {
                         <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                     </div>
                     <div className={cx('output-table-container')}>
-                        <div>{greedy && <Greedy itemsArray={itemsArray} display={true} />}</div>
+                        <div>{greedy && <Greedy itemsArray={arrange(itemsArray)} display={true} />}</div>
                         <div>{branhAndBound && <BranchAndBound itemsArray={itemsArray} display={true} />}</div>
                         <div>{dynamicProgramming && <DynamicProgramming itemsArray={itemsArray} display={true} />}</div>
                         <div>{compare && <Compare itemsArray={itemsArray} />}</div>

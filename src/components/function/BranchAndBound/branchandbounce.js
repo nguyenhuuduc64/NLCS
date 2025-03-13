@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { itemsContext } from '../../../App';
 import OutputTable from '../../OutputTable/outputTable';
 import { arrange } from '../arrange/arrange';
-import { setPA } from '../utils';
+import { setPA, sortByID } from '../utils';
 
 function BranchAndBound({ itemsArray, display }) {
     const {
@@ -15,15 +15,18 @@ function BranchAndBound({ itemsArray, display }) {
         setPABranchAndBound,
         PABranchAndBound,
         setRemainingWeightBranchAndBound,
+        executionTimeBranchAndBound,
+        setExecutionTimeBranchAndBound,
     } = useContext(itemsContext);
 
     const [remainingWeight, setRemainingWeight] = useState(trongluong);
-    // Sắp xếp danh sách vật phẩm
     itemsArray = arrange(itemsArray);
     const n = itemsArray.length;
     let bestSolutions = Array(n).fill(0);
     let GiaLNTT = 0.0;
     const [dsdv, setDsdv] = useState(JSON.parse(JSON.stringify(itemsArray)));
+
+    const startTimeRef = useRef(null);
 
     const Chon = (TLConLai, TLVat) => Math.floor(TLConLai / TLVat);
 
@@ -46,21 +49,19 @@ function BranchAndBound({ itemsArray, display }) {
         if (!dsdv[i + 1] || typeof dsdv[i + 1].DG === 'undefined') {
             return TGT;
         }
-        let bound = TGT + TLConLai * dsdv[i + 1].DG;
-        return bound;
+        return TGT + TLConLai * dsdv[i + 1].DG;
     };
 
     useEffect(() => {
+        startTimeRef.current = performance.now();
+        /*HÀM CHÍNH **********************************************************/
         let TLConLai = trongluong;
         let TGT = 0.0;
 
         const Try = (i, TLConLai, TGT, bestSolutions) => {
             if (i >= n || TLConLai < 0) return;
 
-            let templeChon;
-
-            if (dsdv[i].SL) templeChon = Math.min(Chon(TLConLai, dsdv[i].TL), dsdv[i].SL);
-            else templeChon = Chon(TLConLai, dsdv[i].TL);
+            let templeChon = dsdv[i].SL ? Math.min(Chon(TLConLai, dsdv[i].TL), dsdv[i].SL) : Chon(TLConLai, dsdv[i].TL);
             for (let j = templeChon; j >= 0; j--) {
                 let newTGT = TGT + j * dsdv[i].GT;
                 let newTLConLai = TLConLai - j * dsdv[i].TL;
@@ -76,28 +77,37 @@ function BranchAndBound({ itemsArray, display }) {
                 }
             }
         };
-
+        /************************************************************************** */
         Try(0, TLConLai, TGT, bestSolutions);
+
+        let endTime = performance.now();
+        setExecutionTimeBranchAndBound((endTime - startTimeRef.current || 0.0001).toFixed(4));
     }, [trongluong, branchAndBound]);
+
     /*************************làm cho export array*/
     setExportArrayResult(dsdv);
-    /*****************Đưa phương án của greedy ra ngoài */
+
+    /*****************Đưa phương án của thuật toán nhánh cận ra ngoài */
     useEffect(() => {
-        let PATemple = dsdv.map((dv) => dv.PA);
+        let PATemple = sortByID(dsdv).map((dv) => dv.PA);
         setPABranchAndBound(PATemple);
         setRemainingWeightBranchAndBound(remainingWeight);
     }, [dsdv]);
+    setExportArrayResult(dsdv);
     return (
         display && (
-            <OutputTable
-                sapxep={true}
-                itemsArray={dsdv}
-                PA={true}
-                remainingWeight={remainingWeight}
-                totalValue={totalValueBnb}
-                name="Thuật toán Nhánh cận"
-                type="BRANCH_AND_BOUND"
-            />
+            <div>
+                <OutputTable
+                    sapxep={true}
+                    itemsArray={dsdv}
+                    PA={true}
+                    remainingWeight={remainingWeight}
+                    totalValue={totalValueBnb}
+                    name="Thuật toán Nhánh cận"
+                    type="BRANCH_AND_BOUND"
+                />
+                <p>Thời gian thực hiện thuật toán Nhánh cận: {executionTimeBranchAndBound} ms</p>
+            </div>
         )
     );
 }

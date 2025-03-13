@@ -29,7 +29,9 @@ function App() {
     const [remainingWeightGreedy, setRemainingWeightGreedy] = useState(0);
     const [remainingWeightBranchAndBound, setRemainingWeightBranchAndBound] = useState(0);
     const [remainingWeightDynamicProgramming, setRemainingWeightDynamicProgramming] = useState(0);
-
+    const [executionTimeGreedy, setExecutionTimeGreedy] = useState(0);
+    const [executionTimeBranchAndBound, setExecutionTimeBranchAndBound] = useState(0);
+    const [executionTimeDynamicProgramming, setExecutionTimeDynamicProgramming] = useState(0);
     return (
         <itemsContext.Provider
             value={{
@@ -81,6 +83,12 @@ function App() {
                 setRemainingWeightDynamicProgramming,
                 totalValueDynamicProgramming,
                 setTotalValueDynamicProgramming,
+                executionTimeDynamicProgramming,
+                setExecutionTimeDynamicProgramming,
+                executionTimeBranchAndBound,
+                setExecutionTimeBranchAndBound,
+                executionTimeGreedy,
+                setExecutionTimeGreedy,
             }}
         >
             <GlobalStyles>

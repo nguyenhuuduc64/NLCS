@@ -6,6 +6,7 @@ import DynamicProgramming from '../function/DynamicProgramming/DynamicProgrammin
 import { useContext, useEffect } from 'react';
 import { itemsContext } from '../../App';
 import OutputTable from '../OutputTable/outputTable';
+import { arrange } from '../function/arrange/arrange';
 
 const cx = classNames.bind(styles);
 function Compare({ itemsArray }) {
@@ -25,10 +26,10 @@ function Compare({ itemsArray }) {
 
     return (
         <div className={cx('compare-wrapper')} style={{ display: 'flex' }}>
-            <Greedy itemsArray={itemsArray} display={false} />
+            <Greedy itemsArray={arrange(itemsArray)} display={false} />
             <BranchAndBound itemsArray={itemsArray} display={false} />
             <DynamicProgramming itemsArray={itemsArray} display={false} />
-            <OutputTable itemsArray={itemsArray} compare={true} />
+            <OutputTable itemsArray={itemsArray} compare={true} name="SO SÁNH PHƯƠNG ÁN CÁC THUẬT TOÁN" />
         </div>
     );
 }

@@ -47,16 +47,17 @@ export const errorGT = (GT) => {
 };
 
 export const sortByID = (itemsArray) => {
-    let n = itemsArray.length;
+    let sortedArray = itemsArray.map((item) => ({ ...item })); // Tạo bản sao
+    let n = sortedArray.length;
     for (let i = 0; i < n - 1; i++) {
         for (let j = 0; j < n - i - 1; j++) {
-            if (itemsArray[j].id > itemsArray[j + 1].id) {
-                // Swap itemsArray[j] and itemsArray[j + 1]
-                let temp = itemsArray[j];
-                itemsArray[j] = itemsArray[j + 1];
-                itemsArray[j + 1] = temp;
+            if (sortedArray[j].id > sortedArray[j + 1].id) {
+                // Hoán đổi giá trị
+                let temp = sortedArray[j];
+                sortedArray[j] = sortedArray[j + 1];
+                sortedArray[j + 1] = temp;
             }
         }
     }
-    return itemsArray;
+    return sortedArray;
 };
