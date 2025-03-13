@@ -37,7 +37,6 @@ function Greedy({ itemsArray, display }) {
             newArr[i].PA = templePA;
             totalValue += newArr[i].GT * templePA;
             newRemainingWeight -= newArr[i].TL * templePA;
-            console.log(newRemainingWeight);
         }
         /**************************************************************** */
         let endTime = window.performance.now();
@@ -51,6 +50,8 @@ function Greedy({ itemsArray, display }) {
     }, [greedy]);
     useEffect(() => {
         if (dsdv.length > 0) {
+            let PATemple = sortByID(dsdv).map((dv) => dv.PA);
+            setPAGreedy(PATemple);
             setExportArrayResult(dsdv);
         }
     }, [dsdv]);
