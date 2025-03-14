@@ -18,8 +18,15 @@ function InputTable() {
         const value = parseInt(inputRef.current.value, 10);
         if (!isNaN(value)) {
             setRowCount(value);
-            const newItemsArray = Array.from({ length: value }, () => new Item());
-            setItemsArrayHand(newItemsArray);
+            setItemsArrayHand((prevItems) => {
+                //làm cho trường hợp người dùng nhấn thêm dòng
+                if (value > prevItems.length) {
+                    return [...prevItems, ...Array.from({ length: value - prevItems.length }, () => new Item())];
+                } else {
+                    // người dùng nhấn giảm số dòng
+                    return prevItems.slice(0, value);
+                }
+            });
         }
     };
 
