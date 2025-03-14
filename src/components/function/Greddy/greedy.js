@@ -66,7 +66,7 @@ function Greedy({ itemsArray, display }) {
                     totalValue={dsdv.reduce((sum, item) => sum + item.PA * item.GT, 0)}
                     name="Thuật toán Tham lam"
                 />
-                <p>Thời gian thực thi thuật toán Tham lam: {executionTimeGreedy} ms</p>
+                <p>Thời gian thực thi thuật toán: {executionTimeGreedy} ms</p>
             </div>
         )
     );

@@ -106,7 +106,7 @@ function BranchAndBound({ itemsArray, display }) {
                     name="Thuật toán Nhánh cận"
                     type="BRANCH_AND_BOUND"
                 />
-                <p>Thời gian thực hiện thuật toán Nhánh cận: {executionTimeBranchAndBound} ms</p>
+                <p>Thời gian thực hiện thuật toán: {executionTimeBranchAndBound} ms</p>
             </div>
         )
     );

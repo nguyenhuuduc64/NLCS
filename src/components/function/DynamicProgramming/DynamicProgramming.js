@@ -16,7 +16,11 @@ function DynamicProgramming({ itemsArray, display }) {
         setPADynamicProgramming,
         PADynamicProgramming,
         setTotalValueDynamicProgramming,
+        totalValueDynamicProgramming,
         setRemainingWeightDynamicProgramming,
+        remainingWeightDynamicProgramming,
+        executionTimeDynamicProgramming,
+        setExecutionTimeDynamicProgramming,
     } = useContext(itemsContext);
     const n = itemsArray.length; // Kích thước của mảng items
     const W = parseInt(trongluong); // Trọng lượng tối đa
@@ -69,30 +73,38 @@ function DynamicProgramming({ itemsArray, display }) {
             V -= X[k][V] * dsdv[k].TL;
         }
     };
-    TaoBang(dsdv, n, W, F, X);
-    TraBang(dsdv, n, W, X);
-    const totalValue = F[n - 1][W];
-    const remainingWeight = W - dsdv.reduce((acc, item) => acc + item.PA * item.TL, 0);
+
     /**********************làm cho export arrayarray */
     setExportArrayResult(dsdv);
     /*****************Đưa phương án của greedy ra ngoài */
     useEffect(() => {
+        const startTime = window.performance.now();
+        TaoBang(dsdv, n, W, F, X);
+        TraBang(dsdv, n, W, X);
+        const totalValue = F[n - 1][W];
+        const remainingWeight = W - dsdv.reduce((acc, item) => acc + item.PA * item.TL, 0);
+        const endTime = window.performance.now();
+        const resultTime = endTime - startTime || 0.0001;
         let PATemple = dsdv.map((dv) => dv.PA);
         setPADynamicProgramming(PATemple);
         setRemainingWeightDynamicProgramming(remainingWeight);
         setTotalValueDynamicProgramming(totalValue);
+        setExecutionTimeDynamicProgramming(resultTime.toFixed(4));
     }, [dsdv]);
     return (
         display && (
-            <OutputTable
-                itemsArray={dsdv}
-                PA={true}
-                sapxep={true}
-                totalValue={totalValue}
-                remainingWeight={remainingWeight}
-                name="Thuật toán Quy hoạch động"
-                type="DYNAMIC_PROGRAMMING"
-            />
+            <div>
+                <OutputTable
+                    itemsArray={dsdv}
+                    PA={true}
+                    sapxep={true}
+                    totalValue={totalValueDynamicProgramming}
+                    remainingWeight={remainingWeightDynamicProgramming}
+                    name="Thuật toán Quy hoạch động"
+                    type="DYNAMIC_PROGRAMMING"
+                />
+                <p>Thời gian thực thi thuật toán: {executionTimeDynamicProgramming}</p>
+            </div>
         )
     );
 }
