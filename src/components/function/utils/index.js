@@ -20,33 +20,48 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
     });
     return itemsArray;
 };
-export const exceptionData = (itemsArray = []) => {
-    console.log(itemsArray);
-    const invalidItem = itemsArray.find((item) => isNaN(item.TL) || isNaN(item.GT) || item.GT == 0 || item.TL == 0);
 
-    if (invalidItem) {
-        alert('Thông tin đồ vật không hợp lệ! Vui lòng nhập lại.');
-
-        return false;
+//Hàm dùng để xác định đang ở ba lô mấy
+export const identifyBalo = (itemsArray, soluong) => {
+    let count = 0;
+    itemsArray.map((item) => {
+        if (item.SL) count++;
+    });
+    if (count > 0) return 2;
+    if (count == 0) {
+        let temple = prompt('Bạn muốn giải thuật theo bài toán cái ba lô 1 hay 3');
+        return temple;
     }
+};
+
+export const exceptionData = (itemsArray = [], soluong, identify) => {
+    console.log(identify);
+    if (identify == 1 || identify == 3) {
+        itemsArray.some((item, index) => {
+            if (isNaN(item.GT) || isNaN(item.TL) || item.TL == 0 || item.GT == 0) {
+                alert(`Dữ liệu không hợp lệ, lỗi tại dòng ${index}`);
+                window.location.reload();
+                return false;
+            }
+        });
+    }
+    if (identify == 2) {
+        const isInvalid = itemsArray.some((item, index) => {
+            if (isNaN(item.GT) || isNaN(item.TL) || isNaN(item.SL) || item.TL == 0 || item.GT == 0 || item.SL == 0) {
+                alert(`Dữ liệu không hợp lệ, Lỗi tại dòng: ${index}`);
+                window.location.reload();
+                return true; // Dừng lặp ngay lập tức
+            }
+            return false;
+        });
+    }
+
     return true;
 };
-
-export const errorName = (name) => {
-    name == 'N/A' ?? alert('Lỗi nhập tên đồ vật!!');
-    return name == 'N/A';
+export const handleItemsArray = (itemsArray, soluong, identify) => {
+    if (identify == 1) itemsArray.filter((item) => (item.SL = Infinity));
+    if (identify == 3) itemsArray.filter((item) => (item.SL = 1));
 };
-
-export const errorTL = (TL) => {
-    TL == 0 ?? alert('Trọng lượng không được bằng 0');
-    return TL == 0;
-};
-
-export const errorGT = (GT) => {
-    GT == 0 ?? alert('Giá trị không được bằng 0');
-    return GT == 0;
-};
-
 export const sortByID = (itemsArray) => {
     let sortedArray = itemsArray.map((item) => ({ ...item })); // Tạo bản sao
     let n = sortedArray.length;

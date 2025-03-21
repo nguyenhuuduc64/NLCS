@@ -32,6 +32,8 @@ function App() {
     const [executionTimeGreedy, setExecutionTimeGreedy] = useState(0);
     const [executionTimeBranchAndBound, setExecutionTimeBranchAndBound] = useState(0);
     const [executionTimeDynamicProgramming, setExecutionTimeDynamicProgramming] = useState(0);
+    const [identify, setIdentify] = useState(0);
+
     return (
         <itemsContext.Provider
             value={{
@@ -89,6 +91,8 @@ function App() {
                 setExecutionTimeBranchAndBound,
                 executionTimeGreedy,
                 setExecutionTimeGreedy,
+                identify,
+                setIdentify,
             }}
         >
             <GlobalStyles>

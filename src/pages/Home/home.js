@@ -11,7 +11,7 @@ import DynamicProgramming from '../../components/function/DynamicProgramming/Dyn
 import Compare from '../../components/Compare/compare';
 import { arrange } from '../../components/function/arrange/arrange';
 import ExportTextFile from '../../components/ExportTextFile/exportTextFile';
-import { exceptionData } from '../../components/function/utils';
+import { exceptionData, handleItemsArray, identifyBalo } from '../../components/function/utils';
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -45,6 +45,7 @@ function Home() {
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     //sau khi cập nhật lại itemsArrayFIle hoặc itemsArrayHand thì useEffect sẽ chạy và set Data về true.
     //ban đầu ở lần render đầu tiên thì useEffect chưa nhận ra sự thay đổi của itemsArrayFile hoặc itemsArrayHand nên chưa chạy code bên trongtrong
@@ -79,12 +80,22 @@ function Home() {
     };
 
     const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
+
     useEffect(() => {
         if ((itemsArrayFile && itemsArrayFile.length > 0) || (itemsArrayHand && itemsArrayHand.length > 0)) {
             setIsDataReady(true);
+            setIsDataLoaded(true); // Đánh dấu rằng dữ liệu đã tải
         }
-        setIsValidData(exceptionData(itemsArrayFile));
     }, [itemsArrayFile, itemsArrayHand]);
+    useEffect(() => {
+        if (isDataLoaded) {
+            const identify = identifyBalo(itemsArray, soluong);
+
+            exceptionData(itemsArray, soluong, identify);
+            handleItemsArray(itemsArray, soluong, identify);
+        }
+    }, [isDataLoaded, itemsArray, soluong]);
+    console.log(itemsArray);
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -215,11 +226,11 @@ function Home() {
                     <ExportTextFile data={exportArrayResult} />
                 </div>
             </div>
-            {isValidData && (
+            {
                 <div className={cx('content')}>
                     <div className={cx('read-table-container')}>
                         {itemsArrayHandState && <InputTable />}
-                        {itemsArrayFile.length !== 0 && (
+                        {itemsArray.length !== 0 && (
                             <div>
                                 <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
                                 <OutputTable
@@ -254,7 +265,7 @@ function Home() {
                         <div>{compare && <Compare itemsArray={itemsArray} />}</div>
                     </div>
                 </div>
-            )}
+            }
         </div>
     );
 }
