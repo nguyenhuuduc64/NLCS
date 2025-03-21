@@ -64,10 +64,10 @@ function Home() {
                     .filter((line, index) => index != 0)
                     .map((line, index) => {
                         const itemTemple = new Item();
-                        const [TL, GT, ten, SL] = line.split('\t'); // Giả sử mỗi dòng có 3 trường
+                        const [ten, TL, GT, SL] = line.split('\t'); // Giả sử mỗi dòng có 3 trường
+                        itemTemple.ten = ten;
                         itemTemple.TL = parseInt(TL);
                         itemTemple.GT = parseInt(GT);
-                        itemTemple.ten = ten;
                         itemTemple.SL = parseInt(SL);
                         itemTemple.id = index;
                         return new Item(itemTemple);

@@ -21,13 +21,17 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
     return itemsArray;
 };
 export const exceptionData = (itemsArray = []) => {
-    const invalidItem = itemsArray.find((item) => isNaN(item.TL) || isNaN(item.GT) || item.GT == 0 || item.TL == 0);
+    console.log(itemsArray);
+    const invalidItem = itemsArray.find(
+        (item) => isNaN(item.TL) || isNaN(item.GT) || isNaN(item.SL) || item.GT == 0 || item.TL == 0,
+    );
 
     if (invalidItem) {
         alert('Thông tin đồ vật không hợp lệ! Vui lòng nhập lại.');
+        window.location.reload();
+
         return false;
     }
-
     return true;
 };
 

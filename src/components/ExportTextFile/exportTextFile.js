@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './../../pages/Home/home.module.scss';
 import { sortByID } from '../function/utils';
@@ -7,10 +7,8 @@ import { itemsContext } from '../../App';
 const cx = classNames.bind(styles);
 
 const ExportTextFile = ({ data }) => {
-    // State lưu danh sách dữ liệu
     const [dsdv, setDsdv] = useState([]);
 
-    // Lấy dữ liệu từ Context
     const {
         trongluong,
         PAGreedy,
@@ -27,57 +25,105 @@ const ExportTextFile = ({ data }) => {
         branhAndBound,
         dynamicProgramming,
     } = useContext(itemsContext);
-    // Tạo danh sách kết quả
-    useEffect(() => {
-        let resultArray = [...data];
 
-        setDsdv(sortByID(resultArray));
+    useEffect(() => {
+        setDsdv(sortByID([...data]));
     }, [data]);
 
-    // Xử lý lưu file
+    const headers = useMemo(() => {
+        if (compare) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PAGreedy', 'PABnB', 'PADP'];
+        if (greedy) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PAGreedy'];
+        if (branhAndBound) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PABnB'];
+        if (dynamicProgramming) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PADP'];
+        return [];
+    }, [compare, greedy, branhAndBound, dynamicProgramming]);
+
+    const columnWidths = {
+        ID: 3,
+        Tên: 20,
+        TL: 5,
+        GT: 5,
+        DG: 7,
+        PAGreedy: 10,
+        PABnB: 10,
+        PADP: 10,
+    };
+
+    const formatRow = (rowData) => {
+        return rowData.map((cell, index) => cell.toString().padEnd(columnWidths[headers[index]] || 10, ' ')).join('|');
+    };
+
+    const formattedTable = () => {
+        if (!Array.isArray(dsdv) || dsdv.length === 0) return '';
+
+        const headerRow = formatRow(headers);
+
+        const rows = dsdv.map((item, index) => {
+            const rowData = [
+                item.id,
+                item.ten,
+                item.TL,
+                item.GT,
+                item.DG,
+                ...(compare
+                    ? [PAGreedy[index], PABranchAndBound[index], PADynamicProgramming[index]]
+                    : greedy
+                      ? [PAGreedy[index]]
+                      : branhAndBound
+                        ? [PABranchAndBound[index]]
+                        : dynamicProgramming
+                          ? [PADynamicProgramming[index]]
+                          : []),
+            ];
+            return formatRow(rowData);
+        });
+
+        const remainingWeight = compare
+            ? [remainingWeightGreedy, remainingWeightBranchAndBound, remainingWeightDynamicProgramming]
+            : greedy
+              ? [remainingWeightGreedy]
+              : branhAndBound
+                ? [remainingWeightBranchAndBound]
+                : dynamicProgramming
+                  ? [remainingWeightDynamicProgramming]
+                  : [];
+
+        const totalValue = compare
+            ? [totalValueGreedy, totalValueBnb, totalValueDynamicProgramming]
+            : greedy
+              ? [totalValueGreedy]
+              : branhAndBound
+                ? [totalValueBnb]
+                : dynamicProgramming
+                  ? [totalValueDynamicProgramming]
+                  : [];
+
+        const remainingWeightRow = formatRow(['', 'Trọng lượng còn lại', '', '', '', ...remainingWeight]);
+        const totalValueRow = formatRow(['', 'Tổng giá trị', '', '', '', ...totalValue]);
+
+        return [
+            `Trọng lượng ba lô: ${trongluong}`,
+            headerRow,
+            '-'.repeat(headerRow.length),
+            ...rows,
+            '-'.repeat(headerRow.length),
+            remainingWeightRow,
+            totalValueRow,
+        ].join('\n');
+    };
+
     const handleDownload = () => {
-        if (!Array.isArray(dsdv) || dsdv.length === 0) {
-            console.error('Dữ liệu không hợp lệ hoặc trống');
+        const text = formattedTable();
+        if (!text) {
+            console.error('Lỗi khi định dạng dữ liệu');
             return;
         }
-        let headers;
-        if (!compare) headers = ['TL', 'GT', 'DG', 'PA', 'ID', 'Tên'];
-        else headers = ['TL', 'GT', 'DG', 'PAGreedy', 'PABranchAndBound', 'PADynamicProgramming', 'ID', 'Tên'];
 
-        const rows = dsdv
-            .filter((item) => item && item.TL !== undefined) // Lọc bỏ undefined
-            .map((item, index) =>
-                !compare
-                    ? `${item.TL}\t${item.GT}\t${item.DG}\t${item.PA}\t${item.id}\t${item.ten}`
-                    : `${item.TL}\t${item.GT}\t${item.DG}\t${PAGreedy[index]}\t\t${PABranchAndBound[index]}\t\t\t${PADynamicProgramming[index]}\t\t\t${item.id}\t${item.ten}`,
-            );
-        const rowWeight = `Trọng lượng ba lô : ${trongluong}`;
-        let remainingWeight, totalValue;
-        if (compare) {
-            remainingWeight = `Trọng lượng còn lại     ${remainingWeightGreedy}\t\t${remainingWeightBranchAndBound}\t\t\t${remainingWeightDynamicProgramming}`;
-            totalValue = `Tổng giá trị \t\t${totalValueGreedy}\t\t${totalValueBnb}\t\t\t${totalValueDynamicProgramming}`;
-        } else {
-            if (greedy) {
-                remainingWeight = `Trọng lượng còn lại ${remainingWeightGreedy}`;
-                totalValue = `Tổng giá trị ${totalValueGreedy}`;
-            }
-            if (branhAndBound) {
-                remainingWeight = `Trọng lượng còn lại ${remainingWeightBranchAndBound}`;
-                totalValue = `Tổng giá trị ${totalValueBnb}`;
-            }
-            if (dynamicProgramming) {
-                remainingWeight = `Trọng lượng còn lại ${remainingWeightDynamicProgramming}`;
-                totalValue = `Tổng giá trị ${totalValueDynamicProgramming}`;
-            }
-        }
-
-        const text = [rowWeight, headers.join('\t'), ...rows, remainingWeight, totalValue].join('\n');
         const blob = new Blob([text], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
-
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'bang_so_sanh.txt';
+        link.download = compare ? 'bang_so_sanh.txt' : 'ket_qua_thuat_toan.txt';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -88,7 +134,7 @@ const ExportTextFile = ({ data }) => {
         <div>
             <input id="export-btn" type="button" style={{ display: 'none' }} onClick={handleDownload} />
             <label htmlFor="export-btn" className={cx('input-file')}>
-                Lưu bảng so sánh
+                {compare ? 'Lưu bảng so sánh' : 'Lưu kết quả thuật toán'}
             </label>
         </div>
     );
