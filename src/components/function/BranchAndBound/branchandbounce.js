@@ -2,18 +2,16 @@ import { useContext, useEffect, useState, useRef } from 'react';
 import { itemsContext } from '../../../App';
 import OutputTable from '../../OutputTable/outputTable';
 import { arrange } from '../arrange/arrange';
-import { setPA, sortByID } from '../utils';
+import { sortByID } from '../utils';
 
 function BranchAndBound({ itemsArray, display }) {
     const {
         trongluong,
-        setParentIndex,
         totalValueBnb,
         setTotalValueBnb,
         branchAndBound,
         setExportArrayResult,
         setPABranchAndBound,
-        PABranchAndBound,
         setRemainingWeightBranchAndBound,
         executionTimeBranchAndBound,
         setExecutionTimeBranchAndBound,

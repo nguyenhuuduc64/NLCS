@@ -21,7 +21,6 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
     return itemsArray;
 };
 
-//Hàm dùng để xác định đang ở ba lô mấy
 export const identifyBalo = (itemsArray, soluong) => {
     let count = 0;
     itemsArray.map((item) => {
@@ -35,22 +34,23 @@ export const identifyBalo = (itemsArray, soluong) => {
 };
 
 export const exceptionData = (itemsArray = [], soluong, identify) => {
-    console.log(identify);
-    if (identify == 1 || identify == 3) {
+    /*if (identify == 1 || identify == 3) {
         itemsArray.some((item, index) => {
             if (isNaN(item.GT) || isNaN(item.TL) || item.TL == 0 || item.GT == 0) {
-                alert(`Dữ liệu không hợp lệ, lỗi tại dòng ${index}`);
+                console.log('khong co so luong');
+
+                alert(`Dữ liệu không hợp lệ, lỗi tại dòng ${index + 1}`);
                 window.location.reload();
                 return false;
             }
         });
-    }
-    if (identify == 2) {
+    }*/
+    if (identify == 2 || identify == 0) {
         const isInvalid = itemsArray.some((item, index) => {
             if (isNaN(item.GT) || isNaN(item.TL) || isNaN(item.SL) || item.TL == 0 || item.GT == 0 || item.SL == 0) {
-                alert(`Dữ liệu không hợp lệ, Lỗi tại dòng: ${index}`);
+                alert(`Dữ liệu không hợp lệ, Lỗi tại dòng: ${index + 1}`);
                 window.location.reload();
-                return true; // Dừng lặp ngay lập tức
+                return true;
             }
             return false;
         });

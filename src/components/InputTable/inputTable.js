@@ -10,9 +10,8 @@ import { errorName, exceptionData } from '../function/utils';
 const cx = classNames.bind(styles);
 function InputTable() {
     const [rowCount, setRowCount] = useState(0);
-    const { itemsArrayHand, setItemsArrayHand, itemsArrayHandState, trongluong, setTrongluong } =
+    const { itemsArrayHand, setItemsArrayHand, itemsArrayHandState, trongluong, setTrongluong, submit, setSubmit } =
         useContext(itemsContext);
-    const [submit, setSubmit] = useState(false);
     const inputRef = useRef();
     const handleInputChange = () => {
         const value = parseInt(inputRef.current.value, 10);
@@ -95,6 +94,11 @@ function InputTable() {
         );
     }
     const sortItems = arrange(itemsArrayHand);
+    if (submit && itemsArrayHand.length == 0) {
+        alert('Bạn chưa nhập dữ liệu');
+        window.location.reload();
+        return;
+    }
     return (
         <div>
             {!submit && itemsArrayHandState && (
@@ -132,7 +136,7 @@ function InputTable() {
                 </div>
             )}
             <div>
-                {submit && (
+                {submit && itemsArrayHand.length > 0 && (
                     <div>
                         <h1>Mảng đồ vật được nhập từ bàn phím</h1>
                         <OutputTable sapxep={false} itemsArray={itemsArrayHand} remainingWeight={trongluong} />

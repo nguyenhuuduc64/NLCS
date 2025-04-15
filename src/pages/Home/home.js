@@ -18,8 +18,6 @@ function Home() {
     const [file, setFile] = useState(null);
     const [soluong, setSoluong] = useState(0);
     const [arrangeState, setArrangeState] = useState(false);
-    const [Alert, setAlert] = useState(false);
-    const [isValidData, setIsValidData] = useState(false);
     const {
         itemsArrayFile,
         setItemsArrayFile,
@@ -37,11 +35,14 @@ function Home() {
         setTotalValueBnb,
         itemsArrayHandState,
         setItemsArrayHandState,
-
+        itemsArrayFileState,
         setItemsArrayFileState,
         compare,
         setCompare,
         exportArrayResult,
+        submit,
+        identify,
+        setIdentify,
     } = useContext(itemsContext);
 
     const [isDataReady, setIsDataReady] = useState(false);
@@ -82,20 +83,21 @@ function Home() {
     const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
 
     useEffect(() => {
-        if ((itemsArrayFile && itemsArrayFile.length > 0) || (itemsArrayHand && itemsArrayHand.length > 0)) {
+        if ((itemsArrayFile && itemsArrayFile.length > 0) || (itemsArrayHand && itemsArrayHand.length > 0 && submit)) {
             setIsDataReady(true);
             setIsDataLoaded(true); // Đánh dấu rằng dữ liệu đã tải
         }
     }, [itemsArrayFile, itemsArrayHand]);
+    console.log(isDataLoaded, isDataReady);
     useEffect(() => {
-        if (isDataLoaded) {
-            const identify = identifyBalo(itemsArray, soluong);
-
-            exceptionData(itemsArray, soluong, identify);
-            handleItemsArray(itemsArray, soluong, identify);
+        if (isDataLoaded && !itemsArrayHandState) {
+            const identifyTemple = identifyBalo(itemsArray, soluong);
+            setIdentify(identifyTemple);
+            handleItemsArray(itemsArray, soluong, identifyTemple);
+            console.log(identifyTemple);
+            exceptionData(itemsArray, soluong, identifyTemple);
         }
-    }, [isDataLoaded, itemsArray, soluong]);
-    console.log(itemsArray);
+    }, [isDataLoaded, isDataReady, itemsArray, soluong]);
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -108,6 +110,8 @@ function Home() {
                         onChange={(e) => {
                             setItemsArrayHandState(false);
                             setItemsArrayHand([]);
+                            setItemsArrayFile([]);
+                            setItemsArrayFileState((prev) => !prev);
                             handleFileChange(e);
                             setGreedy(false);
                             setBranhAndBound(false);
@@ -130,10 +134,12 @@ function Home() {
                             });
                             setItemsArrayFileState(false);
                             setItemsArrayFile([]);
+                            setItemsArrayHand([]);
                             setGreedy(false);
                             setBranhAndBound(false);
                             setCompare(false);
                             setDynamicProgramming(false);
+                            setArrangeState(false);
                         }}
                     />
                     <label htmlFor="input-btn" className={cx('input-btn')}>
@@ -230,7 +236,7 @@ function Home() {
                 <div className={cx('content')}>
                     <div className={cx('read-table-container')}>
                         {itemsArrayHandState && <InputTable />}
-                        {itemsArray.length !== 0 && (
+                        {itemsArray.length !== 0 && itemsArrayFileState && (
                             <div>
                                 <h2>MẢNG ĐỒ VẬT ĐỌC ĐƯỢC</h2>
                                 <OutputTable
@@ -255,8 +261,6 @@ function Home() {
                                 </>
                             )}
                         </div>
-
-                        <div className={cx('input-table-container')}>{inputState && <InputTable />}</div>
                     </div>
                     <div className={cx('output-table-container')}>
                         <div>{greedy && <Greedy itemsArray={arrange(itemsArray)} display={true} />}</div>
