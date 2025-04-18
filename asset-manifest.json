@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/NLCS/static/css/main.a935009d.css",
-    "main.js": "/NLCS/static/js/main.791986b3.js",
+    "main.js": "/NLCS/static/js/main.d5a44861.js",
     "index.html": "/NLCS/index.html",
     "main.a935009d.css.map": "/NLCS/static/css/main.a935009d.css.map",
-    "main.791986b3.js.map": "/NLCS/static/js/main.791986b3.js.map"
+    "main.d5a44861.js.map": "/NLCS/static/js/main.d5a44861.js.map"
   },
   "entrypoints": [
     "static/css/main.a935009d.css",
-    "static/js/main.791986b3.js"
+    "static/js/main.d5a44861.js"
   ]
 }
