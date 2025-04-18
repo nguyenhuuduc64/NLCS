@@ -31,10 +31,10 @@ const ExportTextFile = ({ data }) => {
     }, [data]);
 
     const headers = useMemo(() => {
-        if (compare) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PAGreedy', 'PABnB', 'PADP'];
-        if (greedy) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PAGreedy'];
-        if (branhAndBound) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PABnB'];
-        if (dynamicProgramming) return ['ID', 'Tên', 'TL', 'GT', 'DG', 'PADP'];
+        if (compare) return ['ID', 'Tên', 'TL', 'GT', 'SL', 'DG', 'PAGreedy', 'PABnB', 'PADP'];
+        if (greedy) return ['ID', 'Tên', 'TL', 'GT', 'SL', 'DG', 'PAGreedy'];
+        if (branhAndBound) return ['ID', 'Tên', 'TL', 'GT', 'SL', 'DG', 'PABnB'];
+        if (dynamicProgramming) return ['ID', 'Tên', 'TL', 'GT', 'SL', 'DG', 'PADP'];
         return [];
     }, [compare, greedy, branhAndBound, dynamicProgramming]);
 
@@ -43,6 +43,7 @@ const ExportTextFile = ({ data }) => {
         Tên: 20,
         TL: 5,
         GT: 5,
+        SL: 5,
         DG: 7,
         PAGreedy: 10,
         PABnB: 10,
@@ -64,6 +65,7 @@ const ExportTextFile = ({ data }) => {
                 item.ten,
                 item.TL,
                 item.GT,
+                item.SL,
                 item.DG,
                 ...(compare
                     ? [PAGreedy[index], PABranchAndBound[index], PADynamicProgramming[index]]
@@ -98,8 +100,8 @@ const ExportTextFile = ({ data }) => {
                   ? [totalValueDynamicProgramming]
                   : [];
 
-        const remainingWeightRow = formatRow(['', 'Trọng lượng còn lại', '', '', '', ...remainingWeight]);
-        const totalValueRow = formatRow(['', 'Tổng giá trị', '', '', '', ...totalValue]);
+        const remainingWeightRow = formatRow(['', 'Trọng lượng còn lại', '', '', '', '', ...remainingWeight]);
+        const totalValueRow = formatRow(['', 'Tổng giá trị', '', '', '', '', ...totalValue]);
 
         return [
             `Trọng lượng ba lô: ${trongluong}`,

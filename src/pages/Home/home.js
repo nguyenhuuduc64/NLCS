@@ -85,27 +85,28 @@ function Home() {
     useEffect(() => {
         if (!itemsArrayHandState) setSubmit(false);
     }, [itemsArrayHandState]);
-    console.log(itemsArrayHandState, submit);
-    (function prevHandleItemsArray() {
+    console.log('itemsArrayFileState', itemsArrayFileState);
+    useEffect(() => {
         if (itemsArrayHandState && submit) {
-            console.log(itemsArray);
-
-            const identifyTemple = identifyBalo(itemsArray, soluong);
-            console.log(identifyTemple);
+            console.log('bat loi hand');
+            console.log(itemsArrayHand);
+            const identifyTemple = identifyBalo(itemsArrayHand, soluong);
             setIdentify(identifyTemple);
-            exceptionData(itemsArrayHand, soluong, identifyTemple);
-            handleItemsArray(itemsArrayHand, soluong, identifyTemple);
-        }
-        if (itemsArrayFileState) {
-            const identifyTemple = identifyBalo(itemsArray, soluong);
+            exceptionData(itemsArray, soluong, identifyTemple);
+            handleItemsArray(itemsArray, soluong, identifyTemple);
+        } else if (itemsArrayFileState) {
+            console.log('bat loi file');
+            console.log(itemsArray);
+            const identifyTemple = identifyBalo(itemsArrayFile, soluong);
             setIdentify(identifyTemple);
             exceptionData(itemsArray, soluong, identifyTemple);
             handleItemsArray(itemsArray, soluong, identifyTemple);
         }
-    })();
+    }, [itemsArrayHandState, itemsArrayFileState, submit, itemsArray]); // dependencies chính xác
+
     return (
         <div className={cx('container')}>
-            <nav className={cx('nav')}>Bài toán cái ba lô</nav>
+            <nav className={cx('nav')}>Bài toán cái ba lô {identify == 0 ? '' : identify}</nav>
             <div className={cx('input-container')}>
                 <div>
                     <input
@@ -116,7 +117,7 @@ function Home() {
                             setItemsArrayHandState(false);
                             setItemsArrayHand([]);
                             setItemsArrayFile([]);
-                            setItemsArrayFileState((prev) => !prev);
+                            setItemsArrayFileState(true);
                             handleFileChange(e);
                             setGreedy(false);
                             setBranhAndBound(false);

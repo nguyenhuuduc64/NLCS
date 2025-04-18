@@ -22,6 +22,7 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
 };
 
 export const identifyBalo = (itemsArray, soluong) => {
+    console.log('chon loai ba lo');
     let count = 0;
     if (itemsArray.length == 0) {
         return 0;
@@ -37,7 +38,7 @@ export const identifyBalo = (itemsArray, soluong) => {
 };
 
 export const exceptionData = (itemsArray = [], soluong, identify) => {
-    /*if (identify == 1 || identify == 3) {
+    if (identify == 1 || identify == 3) {
         itemsArray.some((item, index) => {
             if (isNaN(item.GT) || isNaN(item.TL) || item.TL == 0 || item.GT == 0) {
                 console.log('khong co so luong');
@@ -47,7 +48,7 @@ export const exceptionData = (itemsArray = [], soluong, identify) => {
                 return false;
             }
         });
-    }*/
+    }
     console.log('bat loi');
     if (itemsArray.length == 0) {
         return;
