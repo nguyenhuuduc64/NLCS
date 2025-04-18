@@ -23,6 +23,9 @@ export const setSolutionBeforeSort = (sortItems, itemsArray) => {
 
 export const identifyBalo = (itemsArray, soluong) => {
     let count = 0;
+    if (itemsArray.length == 0) {
+        return 0;
+    }
     itemsArray.map((item) => {
         if (item.SL) count++;
     });
@@ -45,6 +48,10 @@ export const exceptionData = (itemsArray = [], soluong, identify) => {
             }
         });
     }*/
+    console.log('bat loi');
+    if (itemsArray.length == 0) {
+        return;
+    }
     if (identify == 2 || identify == 0) {
         const isInvalid = itemsArray.some((item, index) => {
             if (isNaN(item.GT) || isNaN(item.TL) || isNaN(item.SL) || item.TL == 0 || item.GT == 0 || item.SL == 0) {

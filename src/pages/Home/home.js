@@ -41,6 +41,7 @@ function Home() {
         setCompare,
         exportArrayResult,
         submit,
+        setSubmit,
         identify,
         setIdentify,
     } = useContext(itemsContext);
@@ -81,23 +82,27 @@ function Home() {
     };
 
     const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
+    useEffect(() => {
+        if (!itemsArrayHandState) setSubmit(false);
+    }, [itemsArrayHandState]);
+    console.log(itemsArrayHandState, submit);
+    (function prevHandleItemsArray() {
+        if (itemsArrayHandState && submit) {
+            console.log(itemsArray);
 
-    useEffect(() => {
-        if ((itemsArrayFile && itemsArrayFile.length > 0) || (itemsArrayHand && itemsArrayHand.length > 0 && submit)) {
-            setIsDataReady(true);
-            setIsDataLoaded(true); // Đánh dấu rằng dữ liệu đã tải
+            const identifyTemple = identifyBalo(itemsArray, soluong);
+            console.log(identifyTemple);
+            setIdentify(identifyTemple);
+            exceptionData(itemsArrayHand, soluong, identifyTemple);
+            handleItemsArray(itemsArrayHand, soluong, identifyTemple);
         }
-    }, [itemsArrayFile, itemsArrayHand]);
-    console.log(isDataLoaded, isDataReady);
-    useEffect(() => {
-        if (isDataLoaded && !itemsArrayHandState) {
+        if (itemsArrayFileState) {
             const identifyTemple = identifyBalo(itemsArray, soluong);
             setIdentify(identifyTemple);
-            handleItemsArray(itemsArray, soluong, identifyTemple);
-            console.log(identifyTemple);
             exceptionData(itemsArray, soluong, identifyTemple);
+            handleItemsArray(itemsArray, soluong, identifyTemple);
         }
-    }, [isDataLoaded, isDataReady, itemsArray, soluong]);
+    })();
     return (
         <div className={cx('container')}>
             <nav className={cx('nav')}>Bài toán cái ba lô</nav>
@@ -117,6 +122,8 @@ function Home() {
                             setBranhAndBound(false);
                             setDynamicProgramming(false);
                             setCompare(false);
+                            setIdentify(0);
+                            console.log('da bam vao nhap file');
                         }}
                     />
                     <label htmlFor="input-file" className={cx('input-file')}>
@@ -129,9 +136,7 @@ function Home() {
                         type="button"
                         style={{ display: 'none' }}
                         onClick={() => {
-                            setItemsArrayHandState((prev) => {
-                                return !prev;
-                            });
+                            setItemsArrayHandState((prev) => !prev);
                             setItemsArrayFileState(false);
                             setItemsArrayFile([]);
                             setItemsArrayHand([]);
@@ -140,6 +145,7 @@ function Home() {
                             setCompare(false);
                             setDynamicProgramming(false);
                             setArrangeState(false);
+                            setIdentify(0);
                         }}
                     />
                     <label htmlFor="input-btn" className={cx('input-btn')}>
