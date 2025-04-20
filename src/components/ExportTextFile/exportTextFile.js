@@ -51,7 +51,12 @@ const ExportTextFile = ({ data }) => {
     };
 
     const formatRow = (rowData) => {
-        return rowData.map((cell, index) => cell.toString().padEnd(columnWidths[headers[index]] || 10, ' ')).join('|');
+        return rowData
+            .map((cell, index) => {
+                const text = (cell ?? '').toString(); // nếu null hoặc undefined thì thay bằng chuỗi rỗng
+                return text.padEnd(columnWidths[headers[index]] || 10, ' ');
+            })
+            .join('|');
     };
 
     const formattedTable = () => {

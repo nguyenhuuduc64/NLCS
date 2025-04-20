@@ -79,24 +79,20 @@ function Home() {
             };
             reader.readAsText(file);
         }
+        e.target.value = ''; // Reset giá trị của input file để có thể chọn lại cùng một file nếu cần
     };
 
     const itemsArray = itemsArrayFile.length ? itemsArrayFile : itemsArrayHand;
     useEffect(() => {
         if (!itemsArrayHandState) setSubmit(false);
     }, [itemsArrayHandState]);
-    console.log('itemsArrayFileState', itemsArrayFileState);
     useEffect(() => {
         if (itemsArrayHandState && submit) {
-            console.log('bat loi hand');
-            console.log(itemsArrayHand);
             const identifyTemple = identifyBalo(itemsArrayHand, soluong);
             setIdentify(identifyTemple);
             exceptionData(itemsArray, soluong, identifyTemple);
             handleItemsArray(itemsArray, soluong, identifyTemple);
         } else if (itemsArrayFileState) {
-            console.log('bat loi file');
-            console.log(itemsArray);
             const identifyTemple = identifyBalo(itemsArrayFile, soluong);
             setIdentify(identifyTemple);
             exceptionData(itemsArray, soluong, identifyTemple);
@@ -124,7 +120,6 @@ function Home() {
                             setDynamicProgramming(false);
                             setCompare(false);
                             setIdentify(0);
-                            console.log('da bam vao nhap file');
                         }}
                     />
                     <label htmlFor="input-file" className={cx('input-file')}>

@@ -49,7 +49,6 @@ export const exceptionData = (itemsArray = [], soluong, identify) => {
             }
         });
     }
-    console.log('bat loi');
     if (itemsArray.length == 0) {
         return;
     }

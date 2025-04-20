@@ -28,7 +28,7 @@ function BranchAndBound({ itemsArray, display }) {
 
     const Chon = (TLConLai, TLVat) => Math.floor(TLConLai / TLVat);
 
-    const GhiNhanKiLuc = (newBestSolutions, newTGT) => {
+    const GhiNhanKiLuc = (newBestSolutions, newTGT, newTLCL) => {
         if (GiaLNTT < newTGT) {
             GiaLNTT = newTGT;
             const updatedDsdv = JSON.parse(JSON.stringify(dsdv));
@@ -36,14 +36,14 @@ function BranchAndBound({ itemsArray, display }) {
                 updatedDsdv[index].PA = item;
             });
             setDsdv(updatedDsdv);
-            let templeTLConLai = trongluong - updatedDsdv.reduce((sum, item) => sum + item.PA * item.TL, 0);
-            let templeTGT = updatedDsdv.reduce((sum, item) => sum + item.PA * item.GT, 0);
-            setRemainingWeight(templeTLConLai);
-            setTotalValueBnb(templeTGT);
+            //let templeTLConLai = trongluong - updatedDsdv.reduce((sum, item) => sum + item.PA * item.TL, 0);
+            //let templeTGT = updatedDsdv.reduce((sum, item) => sum + item.PA * item.GT, 0);
+            setRemainingWeight(newTLCL);
+            setTotalValueBnb(newTGT);
         }
     };
 
-    const upperBound = (i, TGT, TLConLai) => {
+    const CanTren = (i, TGT, TLConLai) => {
         if (!dsdv[i + 1] || typeof dsdv[i + 1].DG === 'undefined') {
             return TGT;
         }
@@ -65,10 +65,10 @@ function BranchAndBound({ itemsArray, display }) {
                 let newTLConLai = TLConLai - j * dsdv[i].TL;
                 let newBestSolutions = [...bestSolutions];
                 newBestSolutions[i] = j;
-                let CT = upperBound(i, newTGT, newTLConLai);
+                let CT = CanTren(i, newTGT, newTLConLai);
                 if (CT > GiaLNTT) {
                     if (i === n - 1 || newTLConLai === 0) {
-                        GhiNhanKiLuc(newBestSolutions, newTGT);
+                        GhiNhanKiLuc(newBestSolutions, newTGT, newTLConLai);
                     } else {
                         Try(i + 1, newTLConLai, newTGT, newBestSolutions);
                     }

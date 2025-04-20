@@ -11,10 +11,8 @@ function DynamicProgramming({ itemsArray, display }) {
     const {
         trongluong,
         dynamicProgramming,
-        exportArrayResult,
         setExportArrayResult,
         setPADynamicProgramming,
-        PADynamicProgramming,
         setTotalValueDynamicProgramming,
         totalValueDynamicProgramming,
         setRemainingWeightDynamicProgramming,
@@ -51,10 +49,12 @@ function DynamicProgramming({ itemsArray, display }) {
                 let FMax = F[k - 1][V];
                 let XMax = 0;
                 let yk = Chon(k, V);
+
                 for (let xk = 0; xk <= yk; xk++) {
                     let TLConLai = V - xk * dsdv[k].TL;
                     if (TLConLai >= 0) {
                         let newValue = F[k - 1][TLConLai] + xk * dsdv[k].GT;
+
                         if (newValue > FMax) {
                             FMax = newValue;
                             XMax = xk;
@@ -82,6 +82,8 @@ function DynamicProgramming({ itemsArray, display }) {
         TaoBang(dsdv, n, W, F, X);
         TraBang(dsdv, n, W, X);
         const totalValue = F[n - 1][W];
+        console.log(F);
+        console.log(X);
         const remainingWeight = W - dsdv.reduce((acc, item) => acc + item.PA * item.TL, 0);
         const endTime = window.performance.now();
         const resultTime = endTime - startTime || 0.0001;
